@@ -29,7 +29,7 @@ public class SnakeGame extends GameGraphics implements KeyListener{
     public SnakeGame(NeuralNet player) {
         super(SQUARE_SIZE *FIELD_WIDTH, SQUARE_SIZE *FIELD_HEIGHT, 32);
         super.setTitle("Score: 0");
-        super.setUndecorated(false);
+        super.setUndecorated(true);
         super.addKeyListener(this);
         this.player = player;
 
@@ -140,7 +140,10 @@ public class SnakeGame extends GameGraphics implements KeyListener{
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_T) {
+        if(e.getKeyCode() == KeyEvent.VK_X)
+            System.exit(0);
+
+        else if(e.getKeyCode() == KeyEvent.VK_T) {
             getDirectionFromNN();
         }
 
