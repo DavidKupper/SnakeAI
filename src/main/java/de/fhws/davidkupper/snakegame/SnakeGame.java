@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.function.DoubleUnaryOperator;
+import java.util.function.IntUnaryOperator;
 
 public class SnakeGame extends GameGraphics implements KeyListener{
     public static final int SQUARE_SIZE = 20;
@@ -93,27 +94,27 @@ public class SnakeGame extends GameGraphics implements KeyListener{
 
         //paint apple
         apple.paint(g);
+
+        g.setColor(Color.white);
+        for(int x = 0; x < FIELD_WIDTH; x++) {
+            g.drawLine(x*SQUARE_SIZE, 0, x*SQUARE_SIZE, FIELD_HEIGHT*SQUARE_SIZE);
+        }
+        for(int y = 0; y < FIELD_HEIGHT; y++) {
+            g.drawLine(0, y*SQUARE_SIZE, FIELD_WIDTH*SQUARE_SIZE, y*SQUARE_SIZE);
+        }
     }
 
     public void getDirectionFromNN() {
-        LinearVector output = player.calcOutput(getFieldVector());
+        LinearVector output = player.calcOutput(getViewVector());
         System.out.println(output);
         System.out.println(output.getIndexOfBiggest());
+        System.out.println("----");
         switch (output.getIndexOfBiggest()) {
-            case 0:
-                snake.setDirection(Snake.Direction.UP);
-                break;
-            case 1:
-                snake.setDirection(Snake.Direction.LEFT);
-                break;
-            case 2:
-                snake.setDirection(Snake.Direction.RIGHT);
-                break;
-            case 3:
-                snake.setDirection(Snake.Direction.DOWN);
-                break;
-            default:
-                throw new IndexOutOfBoundsException("index out of bounds");
+            case 0 -> snake.setDirection(Snake.Direction.UP);
+            case 1 -> snake.setDirection(Snake.Direction.LEFT);
+            case 2 -> snake.setDirection(Snake.Direction.RIGHT);
+            case 3 -> snake.setDirection(Snake.Direction.DOWN);
+            default -> throw new IndexOutOfBoundsException("index out of bounds");
         }
     }
 
@@ -127,11 +128,58 @@ public class SnakeGame extends GameGraphics implements KeyListener{
         return new LinearVector(field);
     }
 
-    public LinearVector geViewVector() {
-        double[] distances = new double[3*8];
-        // calculate all distances from head to apple, border, and body
-        return new LinearVector(Arrays.stream(distances).map(x -> (1 / (x / 2 + 1))).toArray());
+    public LinearVector getViewVector() {
+        int[] distances = new int[3*8];
+        int counter = 0;
+        // calculates all distances
+        for(int x = -1; x <= 1; x++) {
+            for(int y = -1; y <= 1; y++) {
+                if(x == 0 && y == 0)
+                    continue;
+                int[] tmp = distances(x, y);
+                for(int i = 0; i < 3; i++) {
+                    distances[counter++] = tmp[i];
+                }
+            }
+        }
+        return new LinearVector(Arrays.stream(distances).mapToDouble(x -> x == 0 ? 0 : (1 / ((x-1) / 2.0 + 1))).toArray()); // 1 -> directly there, 0 -> not visible
     }
+
+    public int[] distances(int modifyX, int modifyY) {
+        final int WALL = 0;
+        final int SNAKE = 1;
+        final int APPLE = 2;
+        int[] distances = new int[3];
+        Item head = snake.getHead();
+        int x = head.getX();
+        int y = head.getY();
+        for(;;) {
+            if(distances[APPLE] == 0 && x == apple.getX() && y == apple.getY()) {
+                distances[APPLE] = calcDistance(x, y, head.getX(), head.getY());
+            }
+            else if(distances[SNAKE] == 0) {
+                for(Item body : snake.getParts()) {
+                    if(x == body.getX() && y == body.getY()) {
+                        distances[SNAKE] = calcDistance(x, y, head.getX(), head.getY());
+                        break;
+                    }
+                }
+            }
+
+            if(x < 0 || x >= FIELD_WIDTH || y < 0 || y >= FIELD_HEIGHT) {
+                distances[WALL] = calcDistance(x, y, head.getX(), head.getY());
+                break;
+            }
+            x += modifyX;
+            y += modifyY;
+        }
+        return distances;
+    }
+
+    public int calcDistance(int x1, int y1, int x2, int y2) {
+        return Math.abs((x1 - x2)) + Math.abs(y1 - y2);
+    }
+
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -177,7 +225,7 @@ public class SnakeGame extends GameGraphics implements KeyListener{
         DoubleUnaryOperator sigmoid = d -> (1 + Math.tanh(d / 2)) / 2;
 
 
-        NeuralNet player = new NeuralNet.NeuralNetBuilder(10, true, 10, false, sigmoid)
+        NeuralNet player = new NeuralNet.Builder(10, true, 10, false, sigmoid)
                 // for snake top down view
         //        .addLayers(FIELD_WIDTH*FIELD_HEIGHT, 200, 100, 50, 25, 4)
                 // for directional snake view

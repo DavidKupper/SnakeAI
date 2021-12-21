@@ -151,4 +151,8 @@ public class Snake implements Paintable {
         return parts;
     }
 
+    public Item getHead() {
+        return parts.get(0);
+    }
+
 }
