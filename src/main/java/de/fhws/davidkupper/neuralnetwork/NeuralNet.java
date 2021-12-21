@@ -2,16 +2,23 @@ package de.fhws.davidkupper.neuralnetwork;
 
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.DoubleUnaryOperator;
 
 public class NeuralNet {
     int numInput;
-    private ArrayList<Layer> layers;
+    private List<Layer> layers;
 
     private NeuralNet() {
         layers = new ArrayList<>();
     }
 
+    /**
+     * calculates the output based on the given input vector
+     * @param input vector with the input values; must be the size specified at built
+     * @return the calculated output vector
+     * @throws IllegalArgumentException if the size of {@code input} is not the specified one
+     */
     public LinearVector calcOutput(LinearVector input) {
         if(input.size() != numInput)
             throw new IllegalArgumentException("input num not equal to given input size");
@@ -21,14 +28,25 @@ public class NeuralNet {
         return input;
     }
 
+    /**
+     * calculates the output based on the given input vector
+     * @param input vector with the input values; must be the size specified at built
+     * @return all calculated vectors (hidden layers and output layer)
+     * @throws IllegalArgumentException if the size of {@code input} is not the specified one
+     */
+    public List<LinearVector> calcAllLayer(LinearVector input) {
+        if(input.size() != numInput)
+            throw new IllegalArgumentException("input num not equal to given input size");
+        List<LinearVector> list = new ArrayList<>(layers.size());
+        for(Layer l : layers) {
+            input = l.calcActivation(input);
+            list.add(input);
+        }
+        return list;
+    }
 
 
-
-
-
-
-
-    public static class NeuralNetBuilder {
+    public static class Builder {
         private double weightRange;
         private boolean weightsNegative;
         private double biasRange;
@@ -39,7 +57,6 @@ public class NeuralNet {
 
         /**
          * Constructor to create a Builder which is capable to build a NeuralNet
-         * @param depth the depth of the network, including the input layer. Must be at least 2
          * @param weightRange the possible range of the weights
          * @param weightsNegative if {@code true} the weights will be by chance also negative
          * @param biasRange the possible range of the bias
@@ -48,7 +65,7 @@ public class NeuralNet {
          *                           the activation function which is applied on every layer on calculation
          * @throws IllegalArgumentException if depth is less or equal 1 or if inputNodes is less than 1
          */
-        public NeuralNetBuilder(double weightRange, boolean weightsNegative, double biasRange, boolean biasNegative, DoubleUnaryOperator activationFunction) {
+        public Builder(double weightRange, boolean weightsNegative, double biasRange, boolean biasNegative, DoubleUnaryOperator activationFunction) {
             nn = new NeuralNet();
             this.weightRange = weightRange;
             this.weightsNegative = weightsNegative;
@@ -63,12 +80,12 @@ public class NeuralNet {
          * @return this
          * @throws IllegalArgumentException if numNodes are 0 or smaller
          */
-        public NeuralNetBuilder addLayer(int numNodes) {
+        public Builder addLayer(int numNodes) {
             if(numNodes <= 0)
                 throw new IllegalArgumentException("numNodes must be at least 1");
 
             int linkedN;
-            if(nn.layers.size() == 0) {
+            if(nn.layers.isEmpty()) {
                 if(!numInputSet) {
                     numInputSet = true;
                     nn.numInput = numNodes;
@@ -90,7 +107,7 @@ public class NeuralNet {
          * @param numNodes the number of nodes of the added layers
          * @return this
          */
-        public NeuralNetBuilder addLayers(int amount, int numNodes) {
+        public Builder addLayers(int amount, int numNodes) {
             for(int i = 0; i < amount; i++) {
                 addLayer(numNodes);
             }
@@ -102,7 +119,7 @@ public class NeuralNet {
          * @param numNodes array of the number of nodes which are added
          * @return this
          */
-        public NeuralNetBuilder addLayers(int... numNodes) {
+        public Builder addLayers(int... numNodes) {
             for(int n : numNodes) {
                 addLayer(n);
             }
