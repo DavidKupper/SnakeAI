@@ -2,6 +2,7 @@ package de.fhws.davidkupper.snakegame;
 
 import de.fhws.davidkupper.flatgame.Paintable;
 
+import javax.swing.plaf.RootPaneUI;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -45,34 +46,44 @@ public class Snake implements Paintable {
         }
     }
 
-    public void move() {
+    public boolean move() {
         // get coordinates of head
         int x = parts.get(0).getX();
         int y = parts.get(0).getY();
 
+        boolean outOfBorder = false;
         // update new coordinates
         switch (direction) {
             case LEFT:
                 x--;
-                if (x < 0)
+                if (x < 0) {
                     x = SnakeGame.FIELD_WIDTH - 1;
+                    outOfBorder = true;
+                }
                 break;
             case RIGHT:
                 x++;
-                if (x >= SnakeGame.FIELD_WIDTH)
+                if (x >= SnakeGame.FIELD_WIDTH) {
                     x = 0;
+                    outOfBorder = true;
+                }
                 break;
             case UP:
                 y--;
-                if (y < 0)
+                if (y < 0) {
                     y = SnakeGame.FIELD_HEIGHT - 1;
+                    outOfBorder = true;
+                }
                 break;
             case DOWN:
                 y++;
-                if (y >= SnakeGame.FIELD_HEIGHT)
+                if (y >= SnakeGame.FIELD_HEIGHT) {
                     y = 0;
+                    outOfBorder = true;
+                }
                 break;
         }
+
 
         // update body
         for (Part p : parts) {
@@ -82,6 +93,7 @@ public class Snake implements Paintable {
             x = tempX;
             y = tempY;
         }
+        return outOfBorder;
     }
 
     public boolean collidesWithHead(Item item) {

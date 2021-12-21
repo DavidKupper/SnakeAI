@@ -9,11 +9,14 @@ import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Arrays;
+import java.util.function.DoubleUnaryOperator;
 
 public class SnakeGame extends GameGraphics implements KeyListener{
     public static final int SQUARE_SIZE = 20;
     public static final int FIELD_WIDTH = 40;
     public static final int FIELD_HEIGHT = 30;
+    public static final boolean ENDLESS_FIELD = false;
 
     private Snake snake;
     private Apple apple;
@@ -30,7 +33,7 @@ public class SnakeGame extends GameGraphics implements KeyListener{
         super.addKeyListener(this);
         this.player = player;
 
-        snake = new Snake(FIELD_WIDTH / 2, FIELD_HEIGHT / 2, 4);
+        snake = new Snake(FIELD_WIDTH / 2, FIELD_HEIGHT / 2, 5);
         spawnApple();
         super.setVisible(true);
         //startGameTimer();
@@ -68,9 +71,8 @@ public class SnakeGame extends GameGraphics implements KeyListener{
 
     @Override
     public void updateGame() {
-        getFieldVector().print();
         LinearVector output = player.calcOutput(getFieldVector());
-        output.print();
+        System.out.println(output);
         System.out.println(output.getIndexOfBiggest());
         switch (output.getIndexOfBiggest()) {
             case 0:
@@ -88,8 +90,11 @@ public class SnakeGame extends GameGraphics implements KeyListener{
             default:
                 throw new IndexOutOfBoundsException("index out of bounds");
         }
-        snake.move();
-        checkCollisions();
+        boolean outOfBorder = snake.move();
+        if(outOfBorder && !ENDLESS_FIELD)
+            gameOver();
+        else
+            checkCollisions();
     }
 
     @Override
@@ -110,12 +115,19 @@ public class SnakeGame extends GameGraphics implements KeyListener{
     }
 
     public LinearVector getFieldVector() {
+        // for snake top down view
         double[] field = new double[FIELD_WIDTH * FIELD_HEIGHT];
         for(Part p : snake.getParts()) {
             field[p.getX()*p.getY()] = 1.0;
         }
         field[apple.getX()*apple.getY()] = 0.5;
         return new LinearVector(field);
+    }
+
+    public LinearVector geViewVector() {
+        double[] distances = new double[3*8];
+        // calculate all distances from head to apple, border, and body
+        return new LinearVector(Arrays.stream(distances).map(x -> (1 / (x / 2 + 1))).toArray());
     }
 
     @Override
@@ -127,6 +139,9 @@ public class SnakeGame extends GameGraphics implements KeyListener{
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_T)
             tick();
+
+
+
     }
 
     @Override
@@ -136,20 +151,29 @@ public class SnakeGame extends GameGraphics implements KeyListener{
 
 
     public static void main(String[] args) {
+        DoubleUnaryOperator reLu = d -> d < 0 ? 0 : d;
+        DoubleUnaryOperator sigmoid = d -> (1 + Math.tanh(d / 2)) / 2;
 
-        /* NeuralNet player = new NeuralNet.NeuralNetBuilder(50, true, 0, false, (d) -> d < 0 ? 0 : d)
-                .addLayers(FIELD_WIDTH*FIELD_HEIGHT, 200, 100, 50, 25, 4)
+
+        NeuralNet player = new NeuralNet.NeuralNetBuilder(10, true, 10, false, sigmoid)
+                // for snake top down view
+        //        .addLayers(FIELD_WIDTH*FIELD_HEIGHT, 200, 100, 50, 25, 4)
+                // for directional snake view
+                .addLayers(3*8, 200, 100, 50, 25, 4)
                 .build();
         new SnakeGame(player);
-         */
 
-        NeuralNet nn = new NeuralNet.NeuralNetBuilder(30, true, 10, false, d -> d < 0 ? 0 : d)
+
+        /*
+        // Test NN
+        NeuralNet nn = new NeuralNet.NeuralNetBuilder(10, true, 10, false, sigmoid)
                 .addLayers(10, 4, 2)
                 .build();
-        LinearVector in = LinearVector.createRandomLinearVector(10, 10, false);
-        in.print();
-        nn.calcOutput(in).print();
+        LinearVector in = LinearVector.createRandomLinearVector(10, 1, false);
+        System.out.println(in);
+        nn.calcAllLayer(in).forEach(v -> System.out.println(v));
 
+         */
     }
 
 
