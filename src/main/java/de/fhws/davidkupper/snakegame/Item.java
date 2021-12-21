@@ -2,19 +2,20 @@ package de.fhws.davidkupper.snakegame;
 
 import de.fhws.davidkupper.flatgame.Paintable;
 
-import java.awt.Graphics;
-
 public abstract class Item implements Paintable {
     private int x;
     private int y;
+
+    public Item() {
+    }
 
     public Item(int x, int y) {
         this.setPos(x, y);
     }
 
     public void setPos(int x, int y) {
-        this.x = x;
-        this.y = y;
+        setX(x);
+        setY(y);
     }
 
     public int getX() {
