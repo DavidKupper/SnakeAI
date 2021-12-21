@@ -15,6 +15,8 @@ public class Matrix {
      * @return the result of the multiplication
      */
     public LinearVector multiply(LinearVector v) {
+        if(v.size() != this.getNumCols())
+            throw new IllegalArgumentException("vector must have the same amount of rows as the matrix columns");
         double[] retData = new double[data.length];
         for(int i = 0; i < data.length; i++) {
             double sum = 0;

@@ -36,6 +36,8 @@ public class LinearVector {
      * @return the result of the addition
      */
     public LinearVector add(LinearVector v) {
+        if(v.size() != this.size())
+            throw new IllegalArgumentException("vectors must be of the same length");
         double[] retData = new double[v.data.length];
         for(int i = 0; i < retData.length; i++) {
             retData[i] = this.data[i] + v.data[i];
@@ -44,11 +46,13 @@ public class LinearVector {
     }
 
     /**
-     * subtracts the given vector to this vector
+     * subtracts the given vector from this vector
      * @param v the vector which is subtracted from this vector
      * @return the result of the subtraction
      */
     public LinearVector sub(LinearVector v) {
+        if(v.size() != this.size())
+            throw new IllegalArgumentException("vectors must be of the same length");
         double[] retData = new double[v.data.length];
         for(int i = 0; i < retData.length; i++) {
             retData[i] = this.data[i] - v.data[i];
