@@ -21,7 +21,7 @@ public class Matrix {
         for(int i = 0; i < data.length; i++) {
             double sum = 0;
             for(int j = 0; j < data[i].length; j++) {
-                sum += data[i][j] * v.get(i);
+                sum += data[i][j] * v.get(j);
             }
             retData[i] = sum;
         }
