@@ -71,25 +71,6 @@ public class SnakeGame extends GameGraphics implements KeyListener{
 
     @Override
     public void updateGame() {
-        LinearVector output = player.calcOutput(getFieldVector());
-        System.out.println(output);
-        System.out.println(output.getIndexOfBiggest());
-        switch (output.getIndexOfBiggest()) {
-            case 0:
-                snake.setDirection(Snake.Direction.UP);
-                break;
-            case 1:
-                snake.setDirection(Snake.Direction.LEFT);
-                break;
-            case 2:
-                snake.setDirection(Snake.Direction.RIGHT);
-                break;
-            case 3:
-                snake.setDirection(Snake.Direction.DOWN);
-                break;
-            default:
-                throw new IndexOutOfBoundsException("index out of bounds");
-        }
         boolean outOfBorder = snake.move();
         if(outOfBorder && !ENDLESS_FIELD)
             gameOver();
@@ -112,6 +93,28 @@ public class SnakeGame extends GameGraphics implements KeyListener{
 
         //paint apple
         apple.paint(g);
+    }
+
+    public void getDirectionFromNN() {
+        LinearVector output = player.calcOutput(getFieldVector());
+        System.out.println(output);
+        System.out.println(output.getIndexOfBiggest());
+        switch (output.getIndexOfBiggest()) {
+            case 0:
+                snake.setDirection(Snake.Direction.UP);
+                break;
+            case 1:
+                snake.setDirection(Snake.Direction.LEFT);
+                break;
+            case 2:
+                snake.setDirection(Snake.Direction.RIGHT);
+                break;
+            case 3:
+                snake.setDirection(Snake.Direction.DOWN);
+                break;
+            default:
+                throw new IndexOutOfBoundsException("index out of bounds");
+        }
     }
 
     public LinearVector getFieldVector() {
@@ -137,10 +140,26 @@ public class SnakeGame extends GameGraphics implements KeyListener{
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_T)
-            tick();
+        if(e.getKeyCode() == KeyEvent.VK_T) {
+            getDirectionFromNN();
+        }
 
+        else {
+            if(e.getKeyCode() == KeyEvent.VK_W)
+                snake.setDirection(Snake.Direction.UP);
 
+            else if(e.getKeyCode() == KeyEvent.VK_A)
+                snake.setDirection(Snake.Direction.LEFT);
+
+            else if(e.getKeyCode() == KeyEvent.VK_S)
+                snake.setDirection(Snake.Direction.DOWN);
+
+            else if(e.getKeyCode() == KeyEvent.VK_D)
+                snake.setDirection(Snake.Direction.RIGHT);
+
+        }
+
+        tick();
 
     }
 
