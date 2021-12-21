@@ -1,7 +1,6 @@
 package de.fhws.davidkupper.neuralnetwork;
 
 import java.util.Arrays;
-import java.util.OptionalDouble;
 import java.util.function.DoubleUnaryOperator;
 
 public class LinearVector {
@@ -81,13 +80,13 @@ public class LinearVector {
         return index;
     }
 
-    /**
-     * prints this vector to the console
-     */
-    public void print() {
+    @Override
+    public String toString() {
+        String s = "";
         for (int i = 0; i < data.length; i++) {
-            System.out.println("| " + i + ": " + data[i] + " |");
+            s += "| " + i + ": " + String.format("%.2f", data[i]) + " |\n";
         }
+        return s;
     }
 
     /**
