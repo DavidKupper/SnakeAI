@@ -9,28 +9,35 @@ public class SnakeAi {
     NeuralNet nn;
     SnakeGameLogic logic;
     SnakeGame game;
+    static int gamespeed = 100;
 
     public SnakeAi(NeuralNet nn) {
         logic = new SnakeGameLogic();
         this.nn = nn;
     }
 
-    public int startPlaying() {
-        while (!logic.isGameOver()) {
+    public double startPlaying(int max) {
+        int counterToApple = 0;
+        int survCounter = 0;
+        while (!logic.isGameOver() && counterToApple++ < max) {
             getDirectionFromNN();
+            int score = logic.getScore();
             logic.updateGame();
+            if(logic.getScore() > score)
+                counterToApple = 0;
+            survCounter++;
         }
-        return logic.getScore();
+        return logic.getScore()*100 + survCounter/10d;
     }
 
-    public int startPlaying(SnakeGame game) {
+    public double startPlayingWithDisplay() {
         game = new SnakeGame(logic);
         while (!logic.isGameOver()) {
             getDirectionFromNN();
             logic.updateGame();
             game.paint();
             try {
-                Thread.sleep(100);
+                Thread.sleep(gamespeed);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
