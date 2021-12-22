@@ -4,5 +4,6 @@ import java.io.Serializable;
 import java.util.function.DoubleUnaryOperator;
 
 @FunctionalInterface
-public interface ActivationFunction extends DoubleUnaryOperator, Serializable {
+public interface ActivationFunction extends DoubleUnaryOperator, Serializable{
+
 }

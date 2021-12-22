@@ -1,14 +1,16 @@
 package de.fhws.genericAi.neuralNetwork;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.function.DoubleUnaryOperator;
 
-public class LinearVector {
+public class LinearVector implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8595573837844870851L;
+	
 	private double[] data;
-
-	public LinearVector(int size) {
-		data = new double[size];
-	}
 
 	public LinearVector(double[] data) {
 		if (data.length <= 0)
@@ -21,8 +23,18 @@ public class LinearVector {
 	}
 
 	/**
+	 * gets data at index
+	 * 
+	 * @param index index of desired data
+	 * @return data at index
+	 */
+	public double get(int index) {
+		return data[index];
+	}
+
+	/**
 	 * gets the size of the vector
-	 *
+	 * 
 	 * @return size of the vector
 	 */
 	public int size() {
@@ -31,7 +43,7 @@ public class LinearVector {
 
 	/**
 	 * adds the given vector to this vector
-	 *
+	 * 
 	 * @param v the vector which is added on this vector
 	 * @return the result of the addition
 	 */
@@ -47,7 +59,7 @@ public class LinearVector {
 
 	/**
 	 * subtracts the given vector from this vector
-	 *
+	 * 
 	 * @param v the vector which is subtracted from this vector
 	 * @return the result of the subtraction
 	 */
@@ -64,7 +76,7 @@ public class LinearVector {
 	/**
 	 * applies the DoubleUnaryOperator (Function with Double accepted and Double
 	 * returned) to this vector, so on every value
-	 *
+	 * 
 	 * @param function function which is applied to every value of the vector
 	 * @return this vector, after the function was applied
 	 */
@@ -75,7 +87,7 @@ public class LinearVector {
 
 	/**
 	 * finds the index of the biggest number in this vector
-	 *
+	 * 
 	 * @return the index of the biggest number in this vector
 	 */
 	public int getIndexOfBiggest() {
@@ -98,34 +110,27 @@ public class LinearVector {
 
 	/**
 	 * creates a new LinearVector filled with random double numbers
-	 *
+	 * 
+	 * @param n        the number of rows of the vector
 	 * @param range    the range in which the random numbers should be (abs from 0)
 	 * @param negative if {@code true} the numbers will also be negative (but always
 	 *                 > -range)
 	 * @return
 	 */
-	public void randomize(double range, boolean negative) {
-		for (int i = 0; i < data.length; i++) {
+	public static LinearVector createRandomLinearVector(int n, double range, boolean negative) {
+		double[] a = new double[n];
+		for (int i = 0; i < n; i++) {
 			double value = Math.random() * range;
 			if (negative && (int) (Math.random() * 2) < 1)
 				value *= -1;
-			data[i] = value;
+			a[i] = value;
 		}
+		return new LinearVector(a);
 	}
 
 	public double[] getData()
 	{
 		return data;
-	}
-
-	/**
-	 * gets data at index
-	 *
-	 * @param index index of desired data
-	 * @return data at index
-	 */
-	public double get(int index) {
-		return data[index];
 	}
 
 }

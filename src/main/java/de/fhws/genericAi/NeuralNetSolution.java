@@ -25,7 +25,7 @@ public class NeuralNetSolution implements Solution {
 
 	
 	@Override
-	public void calcFitness(){
+	public void calculateFitness(){
 		fitness = calcFitness.applyAsDouble(neuralNet);
 	}
 	
@@ -34,21 +34,10 @@ public class NeuralNetSolution implements Solution {
 		return new NeuralNetSolution(neuralNet.copy(), calcFitness);
 	};
 
-
-	public NeuralNet getNeuralNetwork() {
-		return neuralNet;
-	}
-
-
 	@Override
-	public double getFitness() {
-		return fitness;
-	}
-
-
-	@Override
-	public void mutate() {
-		List<Layer> layers = this.neuralNet.getLayers();
+	public NeuralNetSolution getMutatedChild() {
+		NeuralNetSolution child = copy();
+		List<Layer> layers = child.neuralNet.getLayers();
 		for (Layer layer : layers) {
 			double[][] data = layer.getWeights().getData();
 			for (int x = 0; x < data.length; x++) {
@@ -59,13 +48,24 @@ public class NeuralNetSolution implements Solution {
 						data[x][y] -= (Math.random()/mutationFactor);
 				}
 			}
-			for (int i = 0; i < layer.getBias().getData().length; i++) {
-				if(Math.random() < 0.5)
-					layer.getBias().getData()[i] += (Math.random()/mutationFactor);
-				else
-					layer.getBias().getData()[i] -= (Math.random()/mutationFactor);
-			}
+		for (int i = 0; i < layer.getBias().getData().length; i++) {
+			if(Math.random() < 0.5)
+				layer.getBias().getData()[i] += (Math.random()/mutationFactor);
+			else
+				layer.getBias().getData()[i] -= (Math.random()/mutationFactor);
 		}
+		}
+		return child;
+	}
+
+	public NeuralNet getNeuralNetwork() {
+		return neuralNet;
+	}
+
+
+	@Override
+	public double getFitness() {
+		return fitness;
 	}
 
 

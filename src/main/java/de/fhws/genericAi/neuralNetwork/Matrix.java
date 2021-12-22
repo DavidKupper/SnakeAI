@@ -1,13 +1,14 @@
 package de.fhws.genericAi.neuralNetwork;
 
-import javax.swing.*;
+import java.io.Serializable;
 
-public class Matrix {
-    private double[][] data;
-
-    public Matrix(int rows, int columns) {
-        data = new double[rows][columns];
-    }
+public class Matrix implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3912936837859085090L;
+	
+	private double[][] data;
 
     public Matrix(double[][] data) {
         if(data.length == 0 || data[0].length == 0)
@@ -68,24 +69,30 @@ public class Matrix {
     }
 
     /**
-     * randomizes this matrix with random double numbers
+     * creates a new Matrix filled with random double numbers
+     * @param numRows the number of rows of the matrix
+     * @param numCols the number of columns of the matrix
      * @param range the range in which the random numbers should be (abs from 0)
      * @param negative if {@code true} the numbers will also be negative (but always > -range)
      * @return
      */
-    public void randomize(double range, boolean negative) {
-        for (int i = 0; i < getNumRows(); i++) {
-            for (int j = 0; j < getNumCols(); j++) {
+    public static Matrix createRandomMatrix(int numRows, int numCols, double range, boolean negative) {
+        double[][] a = new double[numRows][numCols];
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
                 double value = Math.random() * range;
                 if(negative && (int) (Math.random() * 2) < 1)
                     value *= -1;
-                data[i][j] = value;
+                a[i][j] = value;
             }
         }
+        return new Matrix(a);
     }
     
-
-    public double[][] getData() {
-        return this.data;
-    }
-}
+    
+    /**
+     * get the data of the Matrix
+     * @return double[][] data
+     */
+    public double[][] getData(){return this.data;}
+}	

@@ -1,19 +1,27 @@
 package de.fhws.genericAi.neuralNetwork;
 
 
+import java.io.Serializable;
 import java.util.function.DoubleUnaryOperator;
 
-public class Layer {
-    private Matrix weights;
+public class Layer implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3844443062431620792L;
+	
+	
+	private Matrix weights;
     private LinearVector bias;
-    private DoubleUnaryOperator fActivation;
+    private ActivationFunction fActivation;
 
-    public Layer(int n, int linkedN, DoubleUnaryOperator activationFunction) {
+    public Layer(int n, int linkedN,
+                 double weightRange, boolean weightsNegative, double biasRange, boolean biasNegative, ActivationFunction activationFunction) {
 
         if(n < 1 || linkedN < 1)
             throw new IllegalArgumentException("n and linkedN must be greater than 0");
-        weights = new Matrix(n, linkedN);
-        bias = new LinearVector(n);
+        weights = Matrix.createRandomMatrix(n, linkedN, weightRange, weightsNegative);
+        bias = LinearVector.createRandomLinearVector(n, biasRange, biasNegative);
         this.fActivation = activationFunction;
     }
 
@@ -45,11 +53,6 @@ public class Layer {
         if(weights.getNumCols() != linkedActivation.size())
             throw new IllegalArgumentException("size of linkedActivation does not fit with weights columns");
         return weights.multiply(linkedActivation).sub(bias).apply(fActivation);
-    }
-
-    public void randomize(double weightRange, boolean weightsNegative, double biasRange, boolean biasNegative) {
-        weights.randomize(weightRange, weightsNegative);
-        bias.randomize(biasRange, biasNegative);
     }
     
     /**

@@ -1,19 +1,22 @@
 package de.fhws.genericAi.genericAlg;
 
-public interface Solution extends Comparable<Solution>{
+public interface Solution extends Comparable<Solution> {
 
-    Solution copy();
-    double getFitness();
-    void calcFitness();
-    void mutate();
+	Solution copy();
 
-    default int compareTo(Solution o) {
-        double fitness = getFitness();
-        double fitnessOther = o.getFitness();
-        if(fitness == fitnessOther)
-            return 0;
-        else {
-            return (fitness - fitnessOther > 0 ? -1 : 1);
-        }
-    }
+	double getFitness();
+	
+	void calculateFitness();
+
+	Solution getMutatedChild();
+
+	default int compareTo(Solution o) {
+		if (getFitness() - o.getFitness() > 0)
+			return -1;
+		else if (getFitness() - o.getFitness() < 0)
+			return 1;
+		else
+			return 0;
+	}
+
 }
