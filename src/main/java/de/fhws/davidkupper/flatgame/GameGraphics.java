@@ -13,28 +13,17 @@ import java.awt.Graphics;
  */
 public abstract class GameGraphics extends JFrame {
 
+    private GameLogic gameLogic;
     private final int areaWidthPxl, areaHeightPxl;
     private int tickSpeed;
     private final Timer gameTimer;
 
-    /**
-     * using default constructor will result in no window and exceptions if some methods are tried to be called
-     */
-    public GameGraphics() {
-        areaWidthPxl = 0;
-        areaHeightPxl = 0;
-        tickSpeed = 0;
-        gameTimer = null;
-    }
 
-    public GameGraphics(int width, int height) {
-        this(width, height, 32);
-    }
-
-    public GameGraphics(int width, int height, int tickSpeed) {
+    public GameGraphics(int width, int height, int tickSpeed, GameLogic gameLogic) {
         super();
         this.areaWidthPxl = width;
         this.areaHeightPxl = height;
+        this.gameLogic = gameLogic;
         setTickSpeed(tickSpeed);
         super.setSize(getAreaWidthPxl(), getAreaHeightPxl());
         super.setUndecorated(true);
@@ -77,14 +66,14 @@ public abstract class GameGraphics extends JFrame {
      * tick method that can be invoked from outside, or is invoked every tick
      */
     public void tick() {
-        updateGame();
+        gameLogic.updateGame();
         repaint();
     }
 
-    /**
-     * abstract method that is invoked every tick, before paintGame() is invoked;
-     */
-    public abstract void updateGame();
+    public void paint() {
+        repaint();
+    }
+
 
     /**
      * abstract method that is invoked every tick, after updateGame(). Use g to pass to Paintable objects, which can draw "themselves"
