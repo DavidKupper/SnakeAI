@@ -1,22 +1,32 @@
 package de.fhws.snakegame;
 
+import de.fhws.genericAi.NeuralNetSolution;
+import de.fhws.genericAi.genericAlg.GenericAlg;
 import de.fhws.genericAi.neuralNetwork.NeuralNet;
 
 import java.util.function.DoubleUnaryOperator;
+import java.util.function.ToDoubleFunction;
 
 public class Main {
     public static void main(String[] args) {
         DoubleUnaryOperator reLu = d -> d < 0 ? 0 : d;
         DoubleUnaryOperator sigmoid = d -> (1 + Math.tanh(d / 2)) / 2;
+        ToDoubleFunction<NeuralNet> fitnessFunc = nn -> new SnakeAi(nn).startPlaying(50);
 
-
-        NeuralNet player = new NeuralNet.Builder(10, true, 10, false, sigmoid)
-                // for snake top down view
-                //        .addLayers(FIELD_WIDTH*FIELD_HEIGHT, 200, 100, 50, 25, 4)
-                // for directional snake view
-                .addLayers(3*8, 200, 100, 50, 25, 4)
+        GenericAlg genericSnakeGames = new GenericAlg.Builder(() -> {
+            return new NeuralNetSolution(
+                    new NeuralNet.Builder(10, true, 1, false, sigmoid)
+                            .addLayers(24, 16, 4)
+                            .build(),
+                            fitnessFunc
+                    );
+                })
+                .setPopulationSize(1000)
+                .setSelectBestOf(100)
+                .setRoundsAmount(100)
+                .setMutateRate(0.5)
                 .build();
-
+        NeuralNet player = ((NeuralNetSolution) genericSnakeGames.solve()).getNeuralNetwork();
         SnakeAi ai = new SnakeAi(player);
         double fitness = ai.startPlayingWithDisplay();
         System.out.println(fitness);

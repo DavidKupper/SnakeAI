@@ -3,14 +3,14 @@ package de.fhws.genericAi.genericAlg;
 
 import java.util.function.Supplier;
 
-public class GenericAlgorithm {
+public class GenericAlg {
     private Supplier<Solution> supplier;
     private int populationSize;
     private int roundsAmount;
     private int selectBestOf;
     private double mutateRate;
 
-    public GenericAlgorithm(Supplier<Solution> supplier, int populationSize, int roundsAmount, int selectBestOf, double mutateRate) {
+    public GenericAlg(Supplier<Solution> supplier, int populationSize, int roundsAmount, int selectBestOf, double mutateRate) {
         this.supplier = supplier;
         this.populationSize = populationSize;
         this.roundsAmount = roundsAmount;
@@ -31,13 +31,13 @@ public class GenericAlgorithm {
     }
 
     public static class Builder {
-        private GenericAlgorithm g;
+        private GenericAlg g;
         /**
          * creates a GenericAlgorithm with the given supplier and a populationSize of 100, roundAmount of 10, selectBestOf
          * @param supplier
          */
         public Builder(Supplier<Solution> supplier) {
-            g = new GenericAlgorithm(supplier, 100, 10, 25, 0.25);
+            g = new GenericAlg(supplier, 100, 10, 25, 0.25);
         }
         public Builder setPopulationSize(int popSize) {
             g.populationSize = popSize;
@@ -59,7 +59,7 @@ public class GenericAlgorithm {
             g.mutateRate = mutateRate;
             return this;
         }
-        public GenericAlgorithm build() {
+        public GenericAlg build() {
             return g;
         }
     }
