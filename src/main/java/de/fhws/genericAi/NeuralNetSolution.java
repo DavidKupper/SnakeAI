@@ -35,7 +35,7 @@ public class NeuralNetSolution implements Solution {
 	};
 
 	@Override
-	public NeuralNetSolution getMutatedChild() {
+	public NeuralNetSolution getChild() {
 		NeuralNetSolution child = copy();
 		List<Layer> layers = child.neuralNet.getLayers();
 		for (Layer layer : layers) {

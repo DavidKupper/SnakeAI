@@ -25,7 +25,7 @@ public class Main {
 					fitness);	
 				})
                 .setPopulationSize(1000)
-                .setRoundsAmount(300)
+                .setRoundsAmount(10)
 				.setSelectBestOfProz(0.05)
 				.setMutateRate(0.1)
 				.build();
@@ -33,12 +33,12 @@ public class Main {
 		
 		//NeuralNet best = NeuralNet.loadFromFile("BestNeuralNetwork");
 		NeuralNet best = ((NeuralNetSolution)g.solve()).getNeuralNetwork();
-		best.safeAsFile("files/bestAi.ser", true);
+		best.safeAsFile("files/bestAi.ser", false);
 		double score = new SnakeAi(best).startPlayingWithDisplay();
         System.out.println("fitness : " + score);
-		// TODO refactor
 		// TODO sigmoid standard
 		// TODO GenericAi Builder with optional NeuralNet makeChild()
+		// TODO refactor getMutatedChild() to getChild()
 	}
 	
 	

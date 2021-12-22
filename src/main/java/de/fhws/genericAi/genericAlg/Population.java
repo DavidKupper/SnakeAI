@@ -31,7 +31,7 @@ class Population {
 		int index = 0;
 		while(solutions.size() < size) {
 			if(Math.random() > mutateRate) {
-				solutions.add(solutions.get(index).getMutatedChild());
+				solutions.add(solutions.get(index).getChild());
 			}
 			else {
 				solutions.add(solutions.get(index).copy());

@@ -8,15 +8,13 @@ public interface Solution extends Comparable<Solution> {
 	
 	void calculateFitness();
 
-	Solution getMutatedChild();
+	Solution getChild();
 
 	default int compareTo(Solution o) {
-		if (getFitness() - o.getFitness() > 0)
-			return -1;
-		else if (getFitness() - o.getFitness() < 0)
-			return 1;
-		else
+		if (getFitness() - o.getFitness() == 0)
 			return 0;
+		else
+			return getFitness() - o.getFitness() < 0 ? 1 : -1;
 	}
 
 }
