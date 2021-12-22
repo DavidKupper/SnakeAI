@@ -8,7 +8,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.DoubleUnaryOperator;
 
 public class NeuralNet implements Serializable {
 	/**
@@ -120,31 +119,33 @@ public class NeuralNet implements Serializable {
 	}
 
 	public static class Builder {
-		private double weightRange;
-		private boolean weightsNegative;
-		private double biasRange;
-		private boolean biasNegative;
 		private ActivationFunction activationFunction;
 		private NeuralNet nn;
-		private boolean numInputSet = false;
+		private boolean inputLayerSet = false;
 
 		/**
 		 * Constructor to create a Builder which is capable to build a NeuralNet
-		 * 
-		 * @param activationFunction DoubleUnaryOperator (Function that accepts Double
-		 *                           and returns Double) to describe the activation
-		 *                           function which is applied on every layer on
-		 *                           calculation
 		 * @throws IllegalArgumentException if depth is less or equal 1 or if inputNodes
 		 *                                  is less than 1
 		 */
-		public Builder(ActivationFunction activationFunction) {
+		public Builder() {
 			nn = new NeuralNet();
-			this.weightRange = weightRange;
-			this.weightsNegative = weightsNegative;
-			this.biasRange = biasRange;
-			this.biasNegative = biasNegative;
-			this.activationFunction = activationFunction;
+			activationFunction = d -> (1 + Math.tanh(d /2 )) /2;
+		}
+
+
+		/**
+		 * set activation function of the neural network. Must be called before adding any layers
+		 * @param aFunc ActivationFunction (Function that accepts Double
+		 *                           and returns Double) to describe the activation
+		 *                           function which is applied on every layer on
+		 *                           calculation
+		 */
+		public Builder setActivationFunction(ActivationFunction aFunc) {
+			if(inputLayerSet)
+				throw new IllegalStateException("activation function must be declared before adding any layers");
+			activationFunction = aFunc;
+			return this;
 		}
 
 		/**
@@ -160,8 +161,8 @@ public class NeuralNet implements Serializable {
 
 			int linkedN;
 			if (nn.layers.isEmpty()) {
-				if (!numInputSet) {
-					numInputSet = true;
+				if (!inputLayerSet) {
+					inputLayerSet = true;
 					nn.numInput = numNodes;
 					return this;
 				} else
@@ -202,10 +203,12 @@ public class NeuralNet implements Serializable {
 
 		/**
 		 * builds the NeuralNet
-		 * 
 		 * @return the built NeuralNet
+		 * @throws IllegalStateException
 		 */
 		public NeuralNet build() {
+			if(!inputLayerSet)
+				throw new IllegalStateException("can not build NeuralNet because no layer has been added");
 			return nn;
 		}
 
