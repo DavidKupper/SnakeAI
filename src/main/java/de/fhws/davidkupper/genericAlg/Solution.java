@@ -4,6 +4,7 @@ public interface Solution extends Comparable<Solution>{
 
     Solution copy();
     double getFitness();
+    void calcFitness();
     void mutate();
 
     default int compareTo(Solution o) {

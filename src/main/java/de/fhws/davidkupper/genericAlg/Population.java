@@ -21,9 +21,10 @@ class Population {
     }
 
     public void nextGen(int selectBestOf, double mutateRate) {
+        solutions.forEach(Solution::calcFitness);
         Collections.sort(solutions);
         int size = solutions.size();
-        solutions = solutions.subList(0, selectBestOf);
+        solutions = new ArrayList<>(solutions.subList(0, selectBestOf));
         int index = selectBestOf;
         while (solutions.size() < size)
             solutions.add(solutions.get(index++ % selectBestOf).copy());
@@ -33,6 +34,13 @@ class Population {
 
     public Solution getBestSolution() {
         return Collections.min(solutions);
+    }
+
+    public double getAverageFitness() {
+        double sum = 0;
+        for(Solution s : solutions)
+            sum += s.getFitness();
+        return sum / solutions.size();
     }
 
 

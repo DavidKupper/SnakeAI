@@ -21,10 +21,13 @@ public class GenericAlgorithm {
     public Solution solve() {
         if(selectBestOf >= populationSize)
             throw new IllegalArgumentException("selectBestOf must be smaller than populationSize");
-        Population population = Population.generateRandomPopulation(populationSize, supplier);
-        for(int i = 0; i < roundsAmount; i++)
-            population.nextGen(selectBestOf, mutateRate);
-        return population.getBestSolution();
+        Population pop = Population.generateRandomPopulation(populationSize, supplier);
+        for(int i = 0; i < roundsAmount; i++) {
+            pop.nextGen(selectBestOf, mutateRate);
+            System.out.println("Computed generation " + i + " of " + roundsAmount +
+                    "; best fit: " + pop.getBestSolution().getFitness() + "; avg fit: " + pop.getAverageFitness());
+        }
+        return pop.getBestSolution();
     }
 
     public static class Builder {
