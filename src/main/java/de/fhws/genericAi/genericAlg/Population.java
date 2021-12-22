@@ -26,7 +26,7 @@ class Population {
 	public void nextGen(int selectBestOf, double mutateRate) {
 		solutions.forEach(s -> s.calculateFitness());
 		Collections.sort(solutions);
-		solutions = new ArrayList<Solution>(solutions.subList(0, selectBestOf));
+		solutions = new ArrayList<>(solutions.subList(0, selectBestOf));
 		
 		int index = 0;
 		while(solutions.size() < size) {

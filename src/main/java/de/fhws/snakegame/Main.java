@@ -14,7 +14,7 @@ public class Main {
                         .addLayers(24, 16, 4)
                         .build()
                         .randomize(10, true, 1, false),
-						nn -> new SnakeAi(nn).startPlaying(150)))
+						nn -> new SnakeAi(nn).startPlaying(150), 0.5, 0.5))
                 .setPopulationSize(1000)
                 .setRoundsAmount(100)
                 .setSelectBestOfProz(0.05)
@@ -27,8 +27,8 @@ public class Main {
         best.safeAsFile("files/bestAi.ser", false);
         double score = new SnakeAi(best).startPlayingWithDisplay();
         System.out.println("fitness : " + score);
-        // TODO GenericAi Builder with optional NeuralNet makeChild()
-        // TODO refactor getMutatedChild() to getChild()
+        // TODO GenericAi Builder with optional NeuralNet makeChild() lambda
+        // TODO implement option to make algorithm multithreaded
     }
 
 

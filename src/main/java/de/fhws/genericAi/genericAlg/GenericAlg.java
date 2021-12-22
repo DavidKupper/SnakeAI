@@ -7,29 +7,24 @@ public class GenericAlg {
 	int popSize;
 	int rounds;
 	double mutateRate;
-	double selectBestOfProz;
+	double selectBestOfPercentage;
 	Supplier<Solution> supplier; 
 
 	
-	private GenericAlg(int popSize, int rounds, double mutateRate, double selectBestOfProz, Supplier<Solution> supplier) {
+	private GenericAlg(int popSize, int rounds, double mutateRate, double selectBestOfPercentage, Supplier<Solution> supplier) {
 		this.popSize = popSize;
 		this.rounds = rounds;
 		this.mutateRate = mutateRate;
-		this.selectBestOfProz = selectBestOfProz;
+		this.selectBestOfPercentage = selectBestOfPercentage;
 		this.supplier = supplier;
 	}
 
 	
-
-	/** @param supplier should contain a function that returns a random Solution
-	 *
-	 */
 	public Solution solve() {
-
 		Population pop = Population.generateRandomPopulation(popSize, supplier);
 		for(int i = 0; i < rounds; i++) {
 						
-			pop.nextGen((int)(popSize*selectBestOfProz), mutateRate);
+			pop.nextGen((int)(popSize* selectBestOfPercentage), mutateRate);
 			
 			System.out.println("Computed Generation " + i + " of " + rounds + " Generations. Best Fitness: " + pop.getBestSolution().getFitness() + " average fitness: " + pop.getAverageFitness());
 		}
@@ -69,7 +64,7 @@ public class GenericAlg {
 			if(selectBestOf < 0 || selectBestOf > 1) 
 				throw new IllegalArgumentException("Best-of rate must be between 0 and 1");
 			
-			g.selectBestOfProz = selectBestOf;
+			g.selectBestOfPercentage = selectBestOf;
 			return this;
 		}
 		

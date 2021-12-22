@@ -10,17 +10,18 @@ import de.fhws.genericAi.neuralNetwork.NeuralNet;
 public class NeuralNetSolution implements Solution {
 
 	
-	final double mutationFactor = 1/2d;
-	
 	private NeuralNet neuralNet;
-	
 	private ToDoubleFunction<NeuralNet> calcFitness;
+	private double mutationRate;
+	private double mutationFactor;
+	private double fitness;
 
-	double fitness;
 	
-	public NeuralNetSolution(NeuralNet neuralNet,ToDoubleFunction<NeuralNet> calcFitness) {
+	public NeuralNetSolution(NeuralNet neuralNet,ToDoubleFunction<NeuralNet> calcFitness, double mutationRate, double mutationFactor) {
 		this.neuralNet = neuralNet;
 		this.calcFitness = calcFitness;
+		this.mutationRate = mutationRate;
+		this.mutationFactor = mutationFactor;
 	}
 
 	
@@ -31,29 +32,61 @@ public class NeuralNetSolution implements Solution {
 	
 	@Override
 	public NeuralNetSolution copy() {
-		return new NeuralNetSolution(neuralNet.copy(), calcFitness);
+		return new NeuralNetSolution(neuralNet.copy(), calcFitness, mutationRate, mutationFactor);
 	};
 
 	@Override
 	public NeuralNetSolution getChild() {
+		return getMutatedChild();
+	}
+
+	public NeuralNetSolution getMutatedChild() {
 		NeuralNetSolution child = copy();
-		List<Layer> layers = child.neuralNet.getLayers();
+		child.mutate();
+		return child;
+	}
+
+	public void mutate() {
+		List<Layer> layers = this.neuralNet.getLayers();
 		for (Layer layer : layers) {
 			double[][] data = layer.getWeights().getData();
 			for (int x = 0; x < data.length; x++) {
 				for (int y = 0; y < data[x].length; y++) {
-					if(Math.random() < 0.5)
-						data[x][y] += (Math.random()/mutationFactor);
-					else
-						data[x][y] -= (Math.random()/mutationFactor);
+					if(Math.random() < mutationRate) {
+						if(Math.random() < 0.5)
+							data[x][y] += (Math.random()/mutationFactor);
+						else
+							data[x][y] -= (Math.random()/mutationFactor);
+					}
 				}
 			}
-		for (int i = 0; i < layer.getBias().getData().length; i++) {
-			if(Math.random() < 0.5)
-				layer.getBias().getData()[i] += (Math.random()/mutationFactor);
-			else
-				layer.getBias().getData()[i] -= (Math.random()/mutationFactor);
+			for (int i = 0; i < layer.getBias().getData().length; i++) {
+				if(Math.random() < mutationRate) {
+					if(Math.random() < 0.5)
+						layer.getBias().getData()[i] += (Math.random() * mutationFactor);
+					else
+						layer.getBias().getData()[i] -= (Math.random() * mutationFactor);
+				}
+			}
 		}
+	}
+
+	public NeuralNetSolution getCrossoverChild(NeuralNetSolution parent1, NeuralNetSolution parent2) {
+		NeuralNetSolution child = parent1.copy();
+		List<Layer> layers = child.neuralNet.getLayers();
+		for(int i = 0; i < layers.size(); i++) {
+			double[][] data = layers.get(i).getWeights().getData();
+			for (int x = 0; x < data.length; x++) {
+				for (int y = 0; y < data[x].length; y++) {
+					if(Math.random() < 0.5)
+						data[x][y] = parent2.neuralNet.getLayers().get(i).getWeights().get(x, y);
+				}
+			}
+			for(int j = 0; j < layers.get(i).getBias().size(); j++) {
+				if(Math.random() < 0.5)
+					layers.get(i).getBias().getData()[j] = parent2.neuralNet.getLayers().get(i).getBias().get(j);
+			}
+
 		}
 		return child;
 	}
