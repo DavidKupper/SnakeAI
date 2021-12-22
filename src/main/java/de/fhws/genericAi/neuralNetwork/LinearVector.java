@@ -12,6 +12,10 @@ public class LinearVector implements Serializable{
 	
 	private double[] data;
 
+	public LinearVector(int size) {
+		data = new double[size];
+		Arrays.fill(data, 0);
+	}
 	public LinearVector(double[] data) {
 		if (data.length <= 0)
 			throw new IllegalArgumentException();
@@ -109,23 +113,19 @@ public class LinearVector implements Serializable{
 	}
 
 	/**
-	 * creates a new LinearVector filled with random double numbers
+	 * randomizes this vector
 	 * 
-	 * @param n        the number of rows of the vector
 	 * @param range    the range in which the random numbers should be (abs from 0)
 	 * @param negative if {@code true} the numbers will also be negative (but always
 	 *                 > -range)
-	 * @return
 	 */
-	public static LinearVector createRandomLinearVector(int n, double range, boolean negative) {
-		double[] a = new double[n];
-		for (int i = 0; i < n; i++) {
+	public void randomize(double range, boolean negative) {
+		for (int i = 0; i < data.length; i++) {
 			double value = Math.random() * range;
 			if (negative && (int) (Math.random() * 2) < 1)
 				value *= -1;
-			a[i] = value;
+			data[i] = value;
 		}
-		return new LinearVector(a);
 	}
 
 	public double[] getData()

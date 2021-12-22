@@ -15,13 +15,11 @@ public class Layer implements Serializable{
     private LinearVector bias;
     private ActivationFunction fActivation;
 
-    public Layer(int n, int linkedN,
-                 double weightRange, boolean weightsNegative, double biasRange, boolean biasNegative, ActivationFunction activationFunction) {
-
+    public Layer(int n, int linkedN, ActivationFunction activationFunction) {
         if(n < 1 || linkedN < 1)
             throw new IllegalArgumentException("n and linkedN must be greater than 0");
-        weights = Matrix.createRandomMatrix(n, linkedN, weightRange, weightsNegative);
-        bias = LinearVector.createRandomLinearVector(n, biasRange, biasNegative);
+        weights = new Matrix(n, linkedN);
+        bias = new LinearVector(n);
         this.fActivation = activationFunction;
     }
 
@@ -53,6 +51,11 @@ public class Layer implements Serializable{
         if(weights.getNumCols() != linkedActivation.size())
             throw new IllegalArgumentException("size of linkedActivation does not fit with weights columns");
         return weights.multiply(linkedActivation).sub(bias).apply(fActivation);
+    }
+
+    public void randomize(double weightRange, boolean weightsNegative, double biasRange, boolean biasNegative) {
+        weights.randomize(weightRange, weightsNegative);
+        bias.randomize(biasRange, biasNegative);
     }
     
     /**

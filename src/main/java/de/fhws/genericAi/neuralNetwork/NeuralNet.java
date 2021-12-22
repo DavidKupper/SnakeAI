@@ -96,13 +96,19 @@ public class NeuralNet implements Serializable {
     	}
     }
 
+    public NeuralNet randomize(double weightRange, boolean weightsNegative, double biasRange, boolean biasNegative) {
+    	for(Layer l : layers)
+    		l.randomize(weightRange, weightsNegative, biasRange, biasNegative);
+    	return this;
+	}
+
 	/**
 	 * copy the current NeuralNet
 	 * 
 	 * @return copy of the current NeuralNet
 	 */
 	public NeuralNet copy() {
-		List<Layer> copiedLayers = new ArrayList<Layer>();
+		List<Layer> copiedLayers = new ArrayList<>();
 		for (int i = 0; i < layers.size(); i++) {
 			copiedLayers.add(layers.get(i).copy());
 		}
@@ -125,12 +131,6 @@ public class NeuralNet implements Serializable {
 		/**
 		 * Constructor to create a Builder which is capable to build a NeuralNet
 		 * 
-		 * @param weightRange        the possible range of the weights
-		 * @param weightsNegative    if {@code true} the weights will be by chance also
-		 *                           negative
-		 * @param biasRange          the possible range of the bias
-		 * @param biasNegative       if {@code true} the bias will be by chance also
-		 *                           negative
 		 * @param activationFunction DoubleUnaryOperator (Function that accepts Double
 		 *                           and returns Double) to describe the activation
 		 *                           function which is applied on every layer on
@@ -138,8 +138,7 @@ public class NeuralNet implements Serializable {
 		 * @throws IllegalArgumentException if depth is less or equal 1 or if inputNodes
 		 *                                  is less than 1
 		 */
-		public Builder(double weightRange, boolean weightsNegative, double biasRange, boolean biasNegative,
-				ActivationFunction activationFunction) {
+		public Builder(ActivationFunction activationFunction) {
 			nn = new NeuralNet();
 			this.weightRange = weightRange;
 			this.weightsNegative = weightsNegative;
@@ -170,8 +169,7 @@ public class NeuralNet implements Serializable {
 			} else
 				linkedN = nn.layers.get(nn.layers.size() - 1).getNumNodes();
 
-			nn.layers.add(new Layer(numNodes, linkedN, weightRange, weightsNegative, biasRange, biasNegative,
-					activationFunction));
+			nn.layers.add(new Layer(numNodes, linkedN, activationFunction));
 			return this;
 		}
 

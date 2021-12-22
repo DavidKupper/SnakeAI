@@ -6,7 +6,6 @@ import de.fhws.genericAi.NeuralNetSolution;
 import de.fhws.genericAi.genericAlg.GenericAlg;
 import de.fhws.genericAi.neuralNetwork.ActivationFunction;
 import de.fhws.genericAi.neuralNetwork.NeuralNet;
-import de.fhws.snakegame.SnakeAi;
 
 public class Main {
 
@@ -19,9 +18,10 @@ public class Main {
 		
 		GenericAlg g = new GenericAlg.Builder(() -> { 
 					return new NeuralNetSolution(
-							new NeuralNet.Builder(10, true, 1, false , sigmoid)
+							new NeuralNet.Builder(sigmoid)
 							.addLayers(24,16,4)
-							.build(),
+							.build()
+							.randomize(10, true, 1, false),
 					fitness);	
 				})
                 .setPopulationSize(1000)
