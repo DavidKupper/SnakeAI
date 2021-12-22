@@ -57,13 +57,13 @@ public class Snake implements Paintable {
             case LEFT:
                 x--;
                 if (x < 0) {
-                    x = SnakeGame.FIELD_WIDTH - 1;
+                    x = SnakeGameLogic.FIELD_WIDTH - 1;
                     outOfBorder = true;
                 }
                 break;
             case RIGHT:
                 x++;
-                if (x >= SnakeGame.FIELD_WIDTH) {
+                if (x >= SnakeGameLogic.FIELD_WIDTH) {
                     x = 0;
                     outOfBorder = true;
                 }
@@ -71,13 +71,13 @@ public class Snake implements Paintable {
             case UP:
                 y--;
                 if (y < 0) {
-                    y = SnakeGame.FIELD_HEIGHT - 1;
+                    y = SnakeGameLogic.FIELD_HEIGHT - 1;
                     outOfBorder = true;
                 }
                 break;
             case DOWN:
                 y++;
-                if (y >= SnakeGame.FIELD_HEIGHT) {
+                if (y >= SnakeGameLogic.FIELD_HEIGHT) {
                     y = 0;
                     outOfBorder = true;
                 }
