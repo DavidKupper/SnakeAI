@@ -11,28 +11,28 @@ public class NeuralNetSolution implements Solution {
 
 	
 	private NeuralNet neuralNet;
-	private ToDoubleFunction<NeuralNet> calcFitness;
-	private double mutationRate;
-	private double mutationFactor;
+	private ToDoubleFunction<NeuralNet> fitnessFunction;
+	private double dataMutationRate;
+	private double dataMutationFactor;
 	private double fitness;
 
 	
-	public NeuralNetSolution(NeuralNet neuralNet,ToDoubleFunction<NeuralNet> calcFitness, double mutationRate, double mutationFactor) {
+	public NeuralNetSolution(NeuralNet neuralNet, ToDoubleFunction<NeuralNet> fitnessFunction, double dataMutationRate, double dataMutationFactor) {
 		this.neuralNet = neuralNet;
-		this.calcFitness = calcFitness;
-		this.mutationRate = mutationRate;
-		this.mutationFactor = mutationFactor;
+		this.fitnessFunction = fitnessFunction;
+		this.dataMutationRate = dataMutationRate;
+		this.dataMutationFactor = dataMutationFactor;
 	}
 
 	
 	@Override
 	public void calculateFitness(){
-		fitness = calcFitness.applyAsDouble(neuralNet);
+		fitness = fitnessFunction.applyAsDouble(neuralNet);
 	}
 	
 	@Override
 	public NeuralNetSolution copy() {
-		return new NeuralNetSolution(neuralNet.copy(), calcFitness, mutationRate, mutationFactor);
+		return new NeuralNetSolution(neuralNet.copy(), fitnessFunction, dataMutationRate, dataMutationFactor);
 	};
 
 	@Override
@@ -52,20 +52,20 @@ public class NeuralNetSolution implements Solution {
 			double[][] data = layer.getWeights().getData();
 			for (int x = 0; x < data.length; x++) {
 				for (int y = 0; y < data[x].length; y++) {
-					if(Math.random() < mutationRate) {
+					if(Math.random() < dataMutationRate) {
 						if(Math.random() < 0.5)
-							data[x][y] += (Math.random()/mutationFactor);
+							data[x][y] += (Math.random()/ dataMutationFactor);
 						else
-							data[x][y] -= (Math.random()/mutationFactor);
+							data[x][y] -= (Math.random()/ dataMutationFactor);
 					}
 				}
 			}
 			for (int i = 0; i < layer.getBias().getData().length; i++) {
-				if(Math.random() < mutationRate) {
+				if(Math.random() < dataMutationRate) {
 					if(Math.random() < 0.5)
-						layer.getBias().getData()[i] += (Math.random() * mutationFactor);
+						layer.getBias().getData()[i] += (Math.random() * dataMutationFactor);
 					else
-						layer.getBias().getData()[i] -= (Math.random() * mutationFactor);
+						layer.getBias().getData()[i] -= (Math.random() * dataMutationFactor);
 				}
 			}
 		}

@@ -15,10 +15,10 @@ public class Main {
                         .build()
                         .randomize(10, true, 1, false),
 						nn -> new SnakeAi(nn).startPlaying(150), 0.5, 0.5))
-                .setPopulationSize(1000)
-                .setRoundsAmount(100)
-                .setSelectBestOfProz(0.05)
-                .setMutateRate(0.1)
+                .withPopulationSize(1000)
+                .withGenerationsAmount(100)
+                .withSelectBestOfPercent(0.05)
+                .withMutationRate(0.1)
                 .build();
 
 

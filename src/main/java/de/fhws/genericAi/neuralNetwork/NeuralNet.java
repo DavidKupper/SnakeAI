@@ -15,15 +15,15 @@ public class NeuralNet implements Serializable {
 	 */
 	private static final long serialVersionUID = -5984131490435879432L;
 
-	int numInput;
+	int inputVectorSize;
 	private List<Layer> layers;
 
 	private NeuralNet() {
 		layers = new ArrayList<>();
 	}
 
-	private NeuralNet(int numInput, List<Layer> layers) {
-		this.numInput = numInput;
+	private NeuralNet(int inputVectorSize, List<Layer> layers) {
+		this.inputVectorSize = inputVectorSize;
 		this.layers = layers;
 	}
 
@@ -37,7 +37,7 @@ public class NeuralNet implements Serializable {
 	 *                                  specified one
 	 */
 	public LinearVector calcOutput(LinearVector input) {
-		if (input.size() != numInput)
+		if (input.size() != inputVectorSize)
 			throw new IllegalArgumentException("input num not equal to given input size");
 		for (Layer l : layers) {
 			input = l.calcActivation(input);
@@ -55,7 +55,7 @@ public class NeuralNet implements Serializable {
 	 *                                  specified one
 	 */
 	public List<LinearVector> calcAllLayer(LinearVector input) {
-		if (input.size() != numInput)
+		if (input.size() != inputVectorSize)
 			throw new IllegalArgumentException("input num not equal to given input size");
 		List<LinearVector> list = new ArrayList<>(layers.size());
 		for (Layer l : layers) {
@@ -111,7 +111,7 @@ public class NeuralNet implements Serializable {
 		for (int i = 0; i < layers.size(); i++) {
 			copiedLayers.add(layers.get(i).copy());
 		}
-		return new NeuralNet(this.numInput, copiedLayers);
+		return new NeuralNet(this.inputVectorSize, copiedLayers);
 	}
 
 	public List<Layer> getLayers() {
@@ -141,7 +141,7 @@ public class NeuralNet implements Serializable {
 		 *                           function which is applied on every layer on
 		 *                           calculation
 		 */
-		public Builder setActivationFunction(ActivationFunction aFunc) {
+		public Builder withActivationFunction(ActivationFunction aFunc) {
 			if(inputLayerSet)
 				throw new IllegalStateException("activation function must be declared before adding any layers");
 			activationFunction = aFunc;
@@ -163,10 +163,10 @@ public class NeuralNet implements Serializable {
 			if (nn.layers.isEmpty()) {
 				if (!inputLayerSet) {
 					inputLayerSet = true;
-					nn.numInput = numNodes;
+					nn.inputVectorSize = numNodes;
 					return this;
 				} else
-					linkedN = nn.numInput;
+					linkedN = nn.inputVectorSize;
 			} else
 				linkedN = nn.layers.get(nn.layers.size() - 1).getNumNodes();
 

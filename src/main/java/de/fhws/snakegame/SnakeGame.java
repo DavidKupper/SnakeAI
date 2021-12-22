@@ -31,15 +31,16 @@ public class SnakeGame extends GameGraphics implements KeyListener{
         g.setColor(new Color(0x575757));
         g.fillRect(0, 0, getAreaWidthPxl(), getAreaHeightPxl());
 
-        // paint score
-        g.setColor(Color.white);
-        g.drawString("Score: " + logic.getScore(), 5, 15);
 
         //paint snake
         logic.getSnake().paint(g);
 
         //paint apple
         logic.getApple().paint(g);
+
+        // paint score
+        g.setColor(Color.white);
+        g.drawString("Score: " + logic.getScore(), 5, 15);
 
         g.setColor(Color.white);
         for(int x = 0; x < SnakeGameLogic.FIELD_WIDTH; x++) {

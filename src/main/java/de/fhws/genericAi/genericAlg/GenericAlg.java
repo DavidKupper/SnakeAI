@@ -38,33 +38,33 @@ public class GenericAlg {
 		
 		private GenericAlg g;
 		
-		public Builder(Supplier<Solution> supplier) {
-			g = new GenericAlg(100, 100, 0.10 , 0.25 , supplier);
+		public Builder(Supplier<Solution> solutionSupplier) {
+			g = new GenericAlg(100, 100, 0.10 , 0.25 , solutionSupplier);
 		}
 		
-		public Builder setPopulationSize(int populationSize) {
+		public Builder withPopulationSize(int populationSize) {
 			g.popSize = populationSize;
 			return this;
 		}
 		
-		public Builder setRoundsAmount(int rounds) {
-			g.rounds = rounds;
+		public Builder withGenerationsAmount(int generationsAmount) {
+			g.rounds = generationsAmount;
 			return this;
 		}
 		
-		public Builder setMutateRate(double mutateRate) {
-			if(mutateRate < 0 || mutateRate > 1) 
+		public Builder withMutationRate(double mutationRate) {
+			if(mutationRate < 0 || mutationRate > 1)
 				throw new IllegalArgumentException("Mutate Rate must be between 0 and 1");
 			
-			g.mutateRate = mutateRate;
+			g.mutateRate = mutationRate;
 			return this;
 		}
 		
-		public Builder setSelectBestOfProz(double selectBestOf) {
-			if(selectBestOf < 0 || selectBestOf > 1) 
+		public Builder withSelectBestOfPercent(double selectBestOfPercent) {
+			if(selectBestOfPercent < 0 || selectBestOfPercent > 1)
 				throw new IllegalArgumentException("Best-of rate must be between 0 and 1");
 			
-			g.selectBestOfPercentage = selectBestOf;
+			g.selectBestOfPercentage = selectBestOfPercent;
 			return this;
 		}
 		
