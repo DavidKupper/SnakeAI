@@ -1,7 +1,7 @@
 package de.fhws.snakegame;
 
-import de.fhws.genericAi.genericAlg.neuralnetwork.LinearVector;
-import de.fhws.genericAi.genericAlg.neuralnetwork.NeuralNet;
+import de.fhws.genericAi.neuralNetwork.LinearVector;
+import de.fhws.genericAi.neuralNetwork.NeuralNet;
 
 import java.util.Arrays;
 

@@ -1,4 +1,4 @@
-package de.fhws.genericAi.genericAlg.neuralnetwork;
+package de.fhws.genericAi.neuralNetwork;
 
 
 import java.util.function.DoubleUnaryOperator;

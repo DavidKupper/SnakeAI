@@ -1,6 +1,6 @@
 package de.fhws.snakegame;
 
-import de.fhws.genericAi.genericAlg.neuralnetwork.NeuralNet;
+import de.fhws.genericAi.neuralNetwork.NeuralNet;
 
 import java.util.function.DoubleUnaryOperator;
 
