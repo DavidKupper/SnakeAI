@@ -1,4 +1,4 @@
-package de.fhws.davidkupper.neuralnetwork;
+package de.fhws.genericAi.genericAlg.neuralnetwork;
 
 
 import java.util.function.DoubleUnaryOperator;
@@ -19,6 +19,16 @@ public class Layer {
     }
 
     /**
+     * Copy Constructor
+     * @return a copy of the given Layer
+     */
+    private Layer(Layer copy) {
+    	this.weights = new Matrix(copy.weights.getData());
+    	this.bias = new LinearVector(copy.bias.getData());
+    	this.fActivation = copy.fActivation;
+    }
+    
+    /**
      * gets the number of the nodes in this layer
      * @return number of nodes in this layer
      */
@@ -37,7 +47,18 @@ public class Layer {
             throw new IllegalArgumentException("size of linkedActivation does not fit with weights columns");
         return weights.multiply(linkedActivation).sub(bias).apply(fActivation);
     }
+    
+    /**
+     * gets the Matrix of weights of this layer
+     * @return Matrix of weights in this layer
+     */
+    public Matrix getWeights() { return weights;}
+    
+    public LinearVector getBias() { return this.bias;}
 
-
+    public Layer copy() {
+    	return new Layer(this);
+    	
+    }
 
 }

@@ -1,4 +1,4 @@
-package de.fhws.davidkupper.flatgame;
+package de.fhws.flatgame;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

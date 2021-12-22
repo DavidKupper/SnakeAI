@@ -1,4 +1,4 @@
-package de.fhws.davidkupper.neuralnetwork;
+package de.fhws.genericAi.genericAlg.neuralnetwork;
 
 
 import java.util.ArrayList;
@@ -11,6 +11,11 @@ public class NeuralNet {
 
     private NeuralNet() {
         layers = new ArrayList<>();
+    }
+    
+    private NeuralNet(int numInput, List<Layer> layers) {
+    	this.numInput = numInput;
+    	this.layers = layers;
     }
 
     /**
@@ -44,7 +49,21 @@ public class NeuralNet {
         }
         return list;
     }
-
+    
+    /**
+     * copy the current NeuralNet
+     * @return copy of the current NeuralNet
+     */
+    public NeuralNet copy() {
+    	List<Layer> copiedLayers = new ArrayList<Layer>();
+    	for(int i = 0; i < layers.size(); i++) {
+    		copiedLayers.add(layers.get(i).copy());
+    	}
+    	return new NeuralNet(this.numInput, copiedLayers);
+    }
+    
+    
+    public List<Layer> getLayers(){ return layers;}
 
     public static class Builder {
         private double weightRange;

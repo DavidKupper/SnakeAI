@@ -1,4 +1,4 @@
-package de.fhws.davidkupper.snakegame;
+package de.fhws.snakegame;
 
 import java.awt.*;
 

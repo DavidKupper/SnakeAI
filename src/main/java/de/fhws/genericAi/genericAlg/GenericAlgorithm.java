@@ -1,4 +1,4 @@
-package de.fhws.davidkupper.genericAlg;
+package de.fhws.genericAi.genericAlg;
 
 
 import java.util.function.Supplier;

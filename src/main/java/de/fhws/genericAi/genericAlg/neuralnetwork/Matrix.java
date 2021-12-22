@@ -1,12 +1,19 @@
-package de.fhws.davidkupper.neuralnetwork;
+package de.fhws.genericAi.genericAlg.neuralnetwork;
 
 public class Matrix {
     private double[][] data;
 
     public Matrix(double[][] data) {
-        if(data.length <= 0 || data[0].length <= 0)
+        if(data.length == 0 || data[0].length == 0)
             throw new IllegalArgumentException();
-        this.data = data;
+        
+        this.data = new double[data.length][];
+        for(int i = 0; i < this.data.length; i++) {
+        	this.data[i] = new double[data[i].length];
+        	for(int j = 0; j < this.data[i].length; j++) {
+        		this.data[i][j] = data[i][j];
+        	}
+        }        
     }
 
     /**
@@ -74,4 +81,11 @@ public class Matrix {
         }
         return new Matrix(a);
     }
-}
+    
+    
+    /**
+     * get the data of the Matrix
+     * @return double[][] data
+     */
+    public double[][] getData(){return this.data;}
+}	

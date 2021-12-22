@@ -1,6 +1,6 @@
-package de.fhws.davidkupper.snakegame;
+package de.fhws.snakegame;
 
-import de.fhws.davidkupper.flatgame.Paintable;
+import de.fhws.flatgame.Paintable;
 
 public abstract class Item implements Paintable {
     private int x;

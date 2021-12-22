@@ -1,8 +1,7 @@
-package de.fhws.davidkupper.snakegame;
+package de.fhws.snakegame;
 
-import de.fhws.davidkupper.flatgame.Paintable;
+import de.fhws.flatgame.Paintable;
 
-import javax.swing.plaf.RootPaneUI;
 import java.awt.*;
 import java.util.ArrayList;
 

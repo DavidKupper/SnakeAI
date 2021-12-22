@@ -1,4 +1,4 @@
-package de.fhws.davidkupper.flatgame;
+package de.fhws.flatgame;
 
 public abstract class GameLogic {
     public abstract void updateGame();

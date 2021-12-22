@@ -1,13 +1,11 @@
-package de.fhws.davidkupper.snakegame;
+package de.fhws.snakegame;
 
-import de.fhws.davidkupper.flatgame.GameGraphics;
-import de.fhws.davidkupper.neuralnetwork.NeuralNet;
+import de.fhws.flatgame.GameGraphics;
 
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.function.DoubleUnaryOperator;
 
 public class SnakeGame extends GameGraphics implements KeyListener{
     public static final int SQUARE_SIZE = 20;

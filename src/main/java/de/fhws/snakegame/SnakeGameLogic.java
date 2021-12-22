@@ -1,6 +1,6 @@
-package de.fhws.davidkupper.snakegame;
+package de.fhws.snakegame;
 
-import de.fhws.davidkupper.flatgame.GameLogic;
+import de.fhws.flatgame.GameLogic;
 
 public class SnakeGameLogic extends GameLogic {
     private Snake snake;

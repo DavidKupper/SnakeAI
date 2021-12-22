@@ -1,4 +1,4 @@
-package de.fhws.davidkupper.genericAlg;
+package de.fhws.genericAi.genericAlg;
 
 public interface Solution extends Comparable<Solution>{
 
