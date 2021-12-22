@@ -27,7 +27,7 @@ public class SnakeAi {
                 counterToApple = 0;
             survCounter++;
         }
-        return logic.getScore()*100 + survCounter/10d;
+        return logic.getScore()*200 + survCounter/10d;
     }
 
     public double startPlayingWithDisplay() {

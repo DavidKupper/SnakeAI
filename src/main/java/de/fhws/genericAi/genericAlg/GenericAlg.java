@@ -7,10 +7,10 @@ public class GenericAlg {
     private Supplier<Solution> supplier;
     private int populationSize;
     private int roundsAmount;
-    private int selectBestOf;
+    private double selectBestOf;
     private double mutateRate;
 
-    public GenericAlg(Supplier<Solution> supplier, int populationSize, int roundsAmount, int selectBestOf, double mutateRate) {
+    public GenericAlg(Supplier<Solution> supplier, int populationSize, int roundsAmount, double selectBestOf, double mutateRate) {
         this.supplier = supplier;
         this.populationSize = populationSize;
         this.roundsAmount = roundsAmount;
@@ -19,11 +19,10 @@ public class GenericAlg {
     }
 
     public Solution solve() {
-        if(selectBestOf >= populationSize)
-            throw new IllegalArgumentException("selectBestOf must be smaller than populationSize");
+        int absoluteBestOf = (int) (selectBestOf * populationSize);
         Population pop = Population.generateRandomPopulation(populationSize, supplier);
         for(int i = 0; i < roundsAmount; i++) {
-            pop.nextGen(selectBestOf, mutateRate);
+            pop.nextGen(absoluteBestOf, mutateRate);
             System.out.println("Computed generation " + i + " of " + roundsAmount +
                     "; best fit: " + pop.getBestSolution().getFitness() + "; avg fit: " + pop.getAverageFitness());
         }
@@ -47,9 +46,9 @@ public class GenericAlg {
             g.roundsAmount = roundsAmount;
             return this;
         }
-        public Builder setSelectBestOf(int selectBestOf) {
-            if(selectBestOf > g.populationSize)
-                throw new IllegalArgumentException("selectBestOf must be smaller or equal to populationSize");
+        public Builder setSelectBestOf(double selectBestOf) {
+            if(selectBestOf < 0 ||selectBestOf > 1)
+                throw new IllegalArgumentException("selectBestOf must be between 0 and 1 (inclusive)");
             g.selectBestOf = selectBestOf;
             return this;
         }

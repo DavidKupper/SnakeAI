@@ -55,41 +55,43 @@ public class NeuralNet {
      * @return copy of the current NeuralNet
      */
     public NeuralNet copy() {
-    	List<Layer> copiedLayers = new ArrayList<Layer>();
+    	List<Layer> copiedLayers = new ArrayList<>();
     	for(int i = 0; i < layers.size(); i++) {
     		copiedLayers.add(layers.get(i).copy());
     	}
     	return new NeuralNet(this.numInput, copiedLayers);
+    }
+
+    /**
+     * ranomizes this NeuralNet with the specified weights and biases
+     * @param weightRange the possible range of the weights
+     * @param weightsNegative if {@code true} the weights will be by chance also negative
+     * @param biasRange the possible range of the bias
+     * @param biasNegative if {@code true} the bias will be by chance also negative
+     * @return reference to this for method chaining
+     */
+    public NeuralNet randomize(double weightRange, boolean weightsNegative, double biasRange, boolean biasNegative) {
+        for(Layer l : layers)
+            l.randomize(weightRange, weightsNegative, biasRange, biasNegative);
+        return this;
     }
     
     
     public List<Layer> getLayers(){ return layers;}
 
     public static class Builder {
-        private double weightRange;
-        private boolean weightsNegative;
-        private double biasRange;
-        private boolean biasNegative;
         private DoubleUnaryOperator activationFunction;
         private NeuralNet nn;
         private boolean numInputSet = false;
 
         /**
          * Constructor to create a Builder which is capable to build a NeuralNet
-         * @param weightRange the possible range of the weights
-         * @param weightsNegative if {@code true} the weights will be by chance also negative
-         * @param biasRange the possible range of the bias
-         * @param biasNegative if {@code true} the bias will be by chance also negative
          * @param activationFunction DoubleUnaryOperator (Function that accepts Double and returns Double) to describe
          *                           the activation function which is applied on every layer on calculation
          * @throws IllegalArgumentException if depth is less or equal 1 or if inputNodes is less than 1
          */
-        public Builder(double weightRange, boolean weightsNegative, double biasRange, boolean biasNegative, DoubleUnaryOperator activationFunction) {
+        public Builder(DoubleUnaryOperator activationFunction) {
             nn = new NeuralNet();
-            this.weightRange = weightRange;
-            this.weightsNegative = weightsNegative;
-            this.biasRange = biasRange;
-            this.biasNegative = biasNegative;
             this.activationFunction = activationFunction;
         }
 
@@ -116,7 +118,7 @@ public class NeuralNet {
             else
                 linkedN = nn.layers.get(nn.layers.size()-1).getNumNodes();
 
-            nn.layers.add(new Layer(numNodes, linkedN, weightRange, weightsNegative, biasRange, biasNegative, activationFunction));
+            nn.layers.add(new Layer(numNodes, linkedN, activationFunction));
             return this;
         }
 

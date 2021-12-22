@@ -8,7 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class SnakeGame extends GameGraphics implements KeyListener{
-    public static final int SQUARE_SIZE = 20;
+    public static final int SQUARE_SIZE = 40;
 
     private SnakeGameLogic logic;
 

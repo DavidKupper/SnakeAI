@@ -8,8 +8,8 @@ public class SnakeGameLogic extends GameLogic {
     private int score;
     boolean gameOver = false;
 
-    public static final int FIELD_WIDTH = 40;
-    public static final int FIELD_HEIGHT = 30;
+    public static final int FIELD_WIDTH = 15;
+    public static final int FIELD_HEIGHT = 10;
     public static final boolean ENDLESS_FIELD = false;
 
     public SnakeGameLogic() {

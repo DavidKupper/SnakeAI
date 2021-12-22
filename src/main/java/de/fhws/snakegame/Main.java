@@ -2,29 +2,35 @@ package de.fhws.snakegame;
 
 import de.fhws.genericAi.NeuralNetSolution;
 import de.fhws.genericAi.genericAlg.GenericAlg;
+import de.fhws.genericAi.neuralNetwork.ActivationFunction;
 import de.fhws.genericAi.neuralNetwork.NeuralNet;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.ToDoubleFunction;
 
 public class Main {
     public static void main(String[] args) {
         DoubleUnaryOperator reLu = d -> d < 0 ? 0 : d;
-        DoubleUnaryOperator sigmoid = d -> (1 + Math.tanh(d / 2)) / 2;
-        ToDoubleFunction<NeuralNet> fitnessFunc = nn -> new SnakeAi(nn).startPlaying(50);
+        ActivationFunction sigmoid = d -> (1 + Math.tanh(d / 2)) / 2;
+
+        ToDoubleFunction<NeuralNet> fitnessFunc = nn -> new SnakeAi(nn).startPlaying(150);
 
         GenericAlg genericSnakeGames = new GenericAlg.Builder(() -> {
             return new NeuralNetSolution(
-                    new NeuralNet.Builder(10, true, 1, false, sigmoid)
+                    new NeuralNet.Builder(sigmoid)
                             .addLayers(24, 16, 4)
-                            .build(),
+                            .build()
+                            .randomize(10, true, 1, false),
                             fitnessFunc
                     );
                 })
                 .setPopulationSize(1000)
-                .setSelectBestOf(100)
-                .setRoundsAmount(100)
-                .setMutateRate(0.5)
+                .setRoundsAmount(200)
+                .setSelectBestOf(0.05)
+                .setMutateRate(0.1)
                 .build();
         NeuralNet player = ((NeuralNetSolution) genericSnakeGames.solve()).getNeuralNetwork();
         SnakeAi ai = new SnakeAi(player);
