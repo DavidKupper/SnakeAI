@@ -65,7 +65,7 @@ public final class FileSystemManager {
 	 *         an Exception occurred.
 	 */
 	public static <T  extends Serializable> boolean writeObjectToFile(T object, String fname, boolean override) {
-		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fname, override))) {
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fname, !override))) {
 			oos.writeObject(object);
 			return true;
 		} catch (IOException e) {
