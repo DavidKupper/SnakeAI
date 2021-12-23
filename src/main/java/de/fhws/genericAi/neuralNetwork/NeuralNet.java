@@ -13,7 +13,7 @@ public class NeuralNet implements Serializable {
 	private static final long serialVersionUID = -5984131490435879432L;
 
 	int inputVectorSize;
-	private List<Layer> layers;
+	private final List<Layer> layers;
 
 	private NeuralNet() {
 		layers = new ArrayList<>();
@@ -119,10 +119,12 @@ public class NeuralNet implements Serializable {
 		return layers;
 	}
 
+
+
+
 	public static class Builder {
 		private ActivationFunction activationFunction;
-		private NeuralNet nn;
-		private boolean inputLayerSet = false;
+		private List<Integer> layerNums = new ArrayList<>();
 
 		/**
 		 * Constructor to create a Builder which is capable to build a NeuralNet
@@ -131,7 +133,6 @@ public class NeuralNet implements Serializable {
 		 *                                  is less than 1
 		 */
 		public Builder() {
-			nn = new NeuralNet();
 			activationFunction = d -> (1 + Math.tanh(d / 2)) / 2;
 		}
 
@@ -144,8 +145,6 @@ public class NeuralNet implements Serializable {
 		 *              every layer on calculation
 		 */
 		public Builder withActivationFunction(ActivationFunction aFunc) {
-			if (inputLayerSet)
-				throw new IllegalStateException("activation function must be declared before adding any layers");
 			activationFunction = aFunc;
 			return this;
 		}
@@ -158,21 +157,10 @@ public class NeuralNet implements Serializable {
 		 * @throws IllegalArgumentException if numNodes are 0 or smaller
 		 */
 		public Builder addLayer(int numNodes) {
-			if (numNodes <= 0)
+			if (numNodes <= 0) {
 				throw new IllegalArgumentException("numNodes must be at least 1");
-
-			int linkedN;
-			if (nn.layers.isEmpty()) {
-				if (!inputLayerSet) {
-					inputLayerSet = true;
-					nn.inputVectorSize = numNodes;
-					return this;
-				} else
-					linkedN = nn.inputVectorSize;
-			} else
-				linkedN = nn.layers.get(nn.layers.size() - 1).getNumNodes();
-
-			nn.layers.add(new Layer(numNodes, linkedN, activationFunction));
+			}
+			layerNums.add(numNodes);
 			return this;
 		}
 
@@ -210,8 +198,16 @@ public class NeuralNet implements Serializable {
 		 * @throws IllegalStateException
 		 */
 		public NeuralNet build() {
-			if (!inputLayerSet)
-				throw new IllegalStateException("can not build NeuralNet because no layer has been added");
+			if(layerNums.size() < 2)
+				throw new IllegalStateException("can not build NeuralNet, at least 2 layers must be added");
+
+			NeuralNet nn = new NeuralNet();
+			nn.inputVectorSize = layerNums.get(0);
+			int linkedN = nn.inputVectorSize;
+			for(int num : layerNums) {
+				nn.layers.add(new Layer(num, linkedN, activationFunction));
+				linkedN = num;
+			}
 			return nn;
 		}
 

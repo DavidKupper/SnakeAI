@@ -16,7 +16,7 @@ public class GenericAi {
     public NeuralNet evolve() {
         Solution solution = alg.solve(printData);
         if(solution instanceof NeuralNetSolution)
-            return (NeuralNet) ((NeuralNetSolution) solution).getNeuralNetwork();
+            return ((NeuralNetSolution) solution).getNeuralNetwork();
         else
             return null;
     }

@@ -35,7 +35,7 @@ public class Main {
 
         //NeuralNet best = NeuralNet.loadFromFile("BestNeuralNetwork");
         NeuralNet best = ai.evolve();
-        best.safeAsFile("files/bestAi.ser", false);
+        best.safeAsFile();
         double score = new SnakeAi(best).startPlayingWithDisplay();
         System.out.println("fitness : " + score);
         // TODO GenericAi Builder with optional NeuralNet makeChild() lambda
