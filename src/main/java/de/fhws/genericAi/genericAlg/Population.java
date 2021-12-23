@@ -9,7 +9,10 @@ class Population {
 
 	private List<Solution> solutions;
 	int size;
-	
+	private double averageFitness;
+	private double medianFitness;
+	private Solution best;
+
 	private Population(List<Solution> solutions, int size) {
 		this.solutions = solutions;
 		this.size = size;
@@ -24,8 +27,13 @@ class Population {
 	}
 	
 	public void nextGen(int selectBestOf, double mutateRate) {
-		solutions.forEach(s -> s.calculateFitness());
+		solutions.forEach(Solution::calculateFitness);
 		Collections.sort(solutions);
+		// retrieve data before repopulating; important: solutions must be sorted
+		calcAvgFit();
+		calcMedianFit();
+		calcBest();
+		// kill all other Solutions
 		solutions = new ArrayList<>(solutions.subList(0, selectBestOf));
 		
 		int index = 0;
@@ -39,18 +47,33 @@ class Population {
 			index = index + 1 % selectBestOf;
 		}
 	}
-	
-	public double getAverageFitness() {
+
+	private void calcAvgFit() {
 		double sum = 0;
 		for(Solution s : solutions) {
 			sum += s.getFitness();
 		}
-		return sum/solutions.size();
-		
+		averageFitness = sum / solutions.size();
+	}
+
+	private void calcMedianFit() {
+		medianFitness = solutions.get(solutions.size() / 2).getFitness();
+	}
+
+	private void calcBest() {
+		best = solutions.get(0);
 	}
 	
-	public Solution getBestSolution() {
-		return Collections.min(solutions);
+	public double getAverageFitness() {
+		return averageFitness;
+	}
+
+	public double getMedianFitness() {
+		return medianFitness;
+	}
+	
+	public Solution getBest() {
+		return best;
 	}
 	
 	

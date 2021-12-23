@@ -23,13 +23,15 @@ public class GenericAlg {
 	public Solution solve() {
 		Population pop = Population.generateRandomPopulation(popSize, supplier);
 		for(int i = 0; i < rounds; i++) {
-						
 			pop.nextGen((int)(popSize* selectBestOfPercentage), mutateRate);
 			
-			System.out.println("Computed Generation " + i + " of " + rounds + " Generations. Best Fitness: " + pop.getBestSolution().getFitness() + " average fitness: " + pop.getAverageFitness());
+			System.out.println("Computed Generation " + i + " of " + rounds +
+					" Generations. Best Fitness: " + pop.getBest().getFitness() +
+					" average fitness: " + pop.getAverageFitness() +
+					" median fitness " + pop.getMedianFitness());
 		}
 		
-		Solution best = pop.getBestSolution();
+		Solution best = pop.getBest();
 		return best;
 		
 	}

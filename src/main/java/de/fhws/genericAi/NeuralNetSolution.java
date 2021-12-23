@@ -1,7 +1,6 @@
 package de.fhws.genericAi;
 
 import java.util.List;
-import java.util.function.ToDoubleFunction;
 
 import de.fhws.genericAi.genericAlg.Solution;
 import de.fhws.genericAi.neuralNetwork.Layer;
