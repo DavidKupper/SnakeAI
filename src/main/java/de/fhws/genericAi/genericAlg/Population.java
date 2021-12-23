@@ -23,6 +23,7 @@ public class Population implements Serializable {
 	private double averageFitness;
 	private double medianFitness;
 	private double bestOfQuintile;
+	private double worstFitness;
 	private Solution best;
 
 	private Population(List<Solution> solutions, int size) {
@@ -114,6 +115,10 @@ public class Population implements Serializable {
 		bestOfQuintile = solutions.get(seleceBestOf - 1).getFitness();
 	}
 
+	public void calcWorstFitness() {
+		worstFitness = solutions.get(solutions.size()-1).getFitness();
+	}
+
 	private void calcBest() {
 		best = solutions.get(0);
 	}
@@ -128,6 +133,10 @@ public class Population implements Serializable {
 
 	public double getBestOfQuintile() {
 		return bestOfQuintile;
+	}
+
+	public double getWorstFitness() {
+		return worstFitness;
 	}
 
 	public Solution getBest() {

@@ -35,13 +35,17 @@ public class GenericAlg {
             pop.nextGen((int) (popSize * selectBestOfPercentage), mutateRate, executor);
 
             if (printData) {
-                System.out.println("Computed Generation " + (gen + 1) + " of " + rounds +
-                        " Generations. Best Fitness: " + pop.getBest().getFitness() +
-                        "; " + selectBestOfPercentage + " quintile: " + pop.getBestOfQuintile() +
-                        "; median fitness " + pop.getMedianFitness() +
-                        "; average fitness: " + String.format("%.2f", pop.getAverageFitness()));
+                String printDataString = (gen + 1) + " of " + rounds + " gens" +
+                        "\t avg: " + String.format("%.2f", pop.getAverageFitness()) +
+                        "\t best: " + String.format("%.2f", pop.getBest().getFitness()) +
+                        "\t " + selectBestOfPercentage + " quintile: " + String.format("%.2f", pop.getBestOfQuintile()) +
+                        "\t median: " + String.format("%.2f", pop.getMedianFitness()) +
+                        "\t worst: " + String.format("%.2f", pop.getWorstFitness());
+
+                System.out.println(printDataString);
 
                 String metaData = gen +
+                        String.format("%.2f", pop.getAverageFitness()) +
                         ";" +
                         String.format("%.2f", pop.getBest().getFitness()) +
                         ";" +
@@ -49,7 +53,8 @@ public class GenericAlg {
                         ";" +
                         String.format("%.2f", pop.getMedianFitness()) +
                         ";" +
-                        String.format("%.2f", pop.getAverageFitness()) +
+                        String.format("%.2f", pop.getWorstFitness()) +
+                        ";" +
                         "\n";
                 FileManager.writeStringToFile(metaData, "metaData.txt", "files", true);
             }
