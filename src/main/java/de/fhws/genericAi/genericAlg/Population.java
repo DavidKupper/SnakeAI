@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
-import de.fhws.filesystemManager.FileSystemManager;
+import de.fhws.filesystemManager.FileManager;
 
 public class Population implements Serializable {
 
@@ -28,7 +28,7 @@ public class Population implements Serializable {
 	}
 	
 	public static Population loadPopulationFromFile(String fname) {
-		return (Population) FileSystemManager.getFirstObjectFromFile(fname);
+		return (Population) FileManager.getFirstObjectFromFile(fname);
 	}
 
 	public static Population generateRandomPopulation(int size, Supplier<Solution> supplier) {
@@ -79,7 +79,7 @@ public class Population implements Serializable {
 	 *                 writing the result in a new file
 	 */
 	public boolean safeToFile(String fname, String dir, boolean override) {
-		return FileSystemManager.writeObjectToAGeneratedFileLocation(this, fname, dir, override, ".ser", true);
+		return FileManager.writeObjectToAGeneratedFileLocation(this, fname, dir, override, ".ser", true);
 	}
 
 	private void calcAvgFit() {

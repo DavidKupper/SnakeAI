@@ -1,8 +1,10 @@
 package de.fhws.filesystemManager;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -10,13 +12,13 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public final class FileSystemManager {
+public final class FileManager {
 
 	/**
 	 * Private constructor so the class can't be instantiated.
 	 *
 	 */
-	private FileSystemManager() {
+	private FileManager() {
 	}
 
 	/**
@@ -45,10 +47,10 @@ public final class FileSystemManager {
 	 *         an Exception occurred.
 	 * 
 	 */
-	public static <T extends Serializable> boolean writeObjectToAGeneratedFileLocation(T object, String fname, String dir, boolean counting,
-			String fileEnding, boolean override) {
+	public static <T extends Serializable> boolean writeObjectToAGeneratedFileLocation(T object, String fname,
+			String dir, boolean counting, String fileEnding, boolean override) {
 		createSubDirIfNotExist(dir);
-		String generatedFileName = generateFullFilename(fname, dir+"/", counting, fileEnding);
+		String generatedFileName = generateFullFilename(fname, dir + "/", counting, fileEnding);
 		return writeObjectToFile(object, generatedFileName, override);
 	}
 
@@ -64,9 +66,34 @@ public final class FileSystemManager {
 	 * @return true if the object got successfully written to the file or false if
 	 *         an Exception occurred.
 	 */
-	public static <T  extends Serializable> boolean writeObjectToFile(T object, String fname, boolean override) {
+	public static <T extends Serializable> boolean writeObjectToFile(T object, String fname, boolean override) {
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fname, !override))) {
 			oos.writeObject(object);
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * Writes a String to a File
+	 * 
+	 * @param string is the String thats being written into the file
+	 * @param fname  is the name of File + ending
+	 * @param dir    is the directory of the file. If it doesn't exist it will be
+	 *               created.
+	 * @param append == false results in the file being overwritten if it already
+	 *               existed. Otherwise the String would get appended
+	 * 
+	 * @return true if the String got successfully written into the file and false
+	 *         if a Exception occurred.
+	 */
+
+	public static boolean writeStringToFile(String string, String fname, String dir, boolean append) {
+		createSubDirIfNotExist(dir);
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(dir + "/" + fname, append))) {
+			bw.write(string);
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -128,22 +155,22 @@ public final class FileSystemManager {
 
 	/**
 	 * creates every subdirectory of given directory recursively if not exists
+	 * 
 	 * @param dir
 	 */
 	private static void createSubDirIfNotExist(String dir) {
-		if(dir.indexOf("/") == -1) {
+		if (dir.indexOf("/") == -1) {
 			createDirIfNotExist(dir);
 			return;
 		}
 		String subDirChain = "";
-		for(String subDir : dir.split("/")) {
-			subDirChain += subDir +"/";
+		for (String subDir : dir.split("/")) {
+			subDirChain += subDir + "/";
 			createDirIfNotExist(subDirChain);
 		}
-		
+
 	}
-	
-	
+
 	/**
 	 * Searches the directory <b> dir </b> and if not found creates it.
 	 * 
@@ -183,6 +210,5 @@ public final class FileSystemManager {
 			return new String[] { fname, null };
 		return new String[] { fname.substring(0, index), fname.substring(index, fname.length()) };
 	}
-
 
 }

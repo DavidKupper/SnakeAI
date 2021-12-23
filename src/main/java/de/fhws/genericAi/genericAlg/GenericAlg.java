@@ -1,6 +1,6 @@
 package de.fhws.genericAi.genericAlg;
 
-import de.fhws.filesystemManager.FileSystemManager;
+import de.fhws.filesystemManager.FileManager;
 
 import java.io.File;
 import java.util.Date;
@@ -44,7 +44,7 @@ public class GenericAlg {
 					.append(gen).append(" dat: ")
 					.append(new Date(System.currentTimeMillis()))
 					.toString();
-			FileSystemManager.writeObjectToFile(log, "files/log.txt",  true);
+			FileManager.writeObjectToFile(log, "files/log.txt",  true);
 		}
 		
 		Solution best = pop.getBest();
