@@ -10,14 +10,16 @@ import de.fhws.genericAi.neuralNetwork.NeuralNet;
 public class GenericAi {
 	private GenericAlg alg;
 	private boolean printData;
+	private int savingInterval;
 
-	private GenericAi(GenericAlg alg, boolean printData) {
+	private GenericAi(GenericAlg alg, boolean printData, int savingInterval) {
 		this.alg = alg;
 		this.printData = printData;
+		this.savingInterval = savingInterval;
 	};
 
 	public NeuralNet evolve() {
-		Solution solution = alg.solve(printData);
+		Solution solution = alg.solve(printData, savingInterval);
 		if (solution instanceof NeuralNetSolution)
 			return ((NeuralNetSolution) solution).getNeuralNetwork();
 		else
@@ -52,6 +54,7 @@ public class GenericAi {
 		double dataMutationRate = 0.5;
 		double dataMutationFactor = 0.5;
 		Population givenPop;
+		int savingInterval;
 
 		boolean printData = false;
 
@@ -120,6 +123,11 @@ public class GenericAi {
 			return this;
 		}
 
+		public Builder withSavingInterval(int savingInterval) {
+		    this.savingInterval = savingInterval;
+		    return this;
+        }
+
 		public GenericAi build() {
 			Supplier<Solution> givenSupplier;
 			if (givenPop == null) {
@@ -138,7 +146,7 @@ public class GenericAi {
 					.withSelectBestOfPercent(selectBestOfPercent)
 					.withMutationRate(outerMutationRate)
 					.build(),
-					printData);
+					printData, savingInterval);
 		}
 	}
 }

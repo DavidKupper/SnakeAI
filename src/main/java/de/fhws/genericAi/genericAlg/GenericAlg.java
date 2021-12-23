@@ -1,6 +1,9 @@
 package de.fhws.genericAi.genericAlg;
 
+import de.fhws.filesystemManager.FileSystemManager;
+
 import java.io.File;
+import java.util.Date;
 import java.util.function.Supplier;
 
 public class GenericAlg {
@@ -22,18 +25,26 @@ public class GenericAlg {
 	}
 
 	
-	public Solution solve(boolean printData) {
+	public Solution solve(boolean printData, int savingInterval) {
 		pop = Population.generateRandomPopulation(popSize, supplier);
-		for(int i = 0; i < rounds; i++) {
+		for(int gen = 0; gen < rounds; gen++) {
 			pop.nextGen((int)(popSize* selectBestOfPercentage), mutateRate);
 
 			if(printData)
-				System.out.println("Computed Generation " + (i+1) + " of " + rounds +
+				System.out.println("Computed Generation " + (gen+1) + " of " + rounds +
 					" Generations. Best Fitness: " + pop.getBest().getFitness() +
 					"; average fitness: " + String.format("%.2f", pop.getAverageFitness()) +
 					"; median fitness " + pop.getMedianFitness() +
 					"; " + selectBestOfPercentage + " quintile: " + pop.getBestOfQuintile());
 
+			if(( gen+1) % savingInterval == 0)
+				pop.safeToFile("saved", "files/intervalSaves", true);
+			String log = new StringBuilder()
+					.append("generation: ")
+					.append(gen).append(" dat: ")
+					.append(new Date(System.currentTimeMillis()))
+					.toString();
+			FileSystemManager.writeObjectToFile(log, "files/log.txt",  true);
 		}
 		
 		Solution best = pop.getBest();
