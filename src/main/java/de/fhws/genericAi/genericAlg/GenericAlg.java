@@ -1,5 +1,6 @@
 package de.fhws.genericAi.genericAlg;
 
+import java.io.File;
 import java.util.function.Supplier;
 
 public class GenericAlg {
@@ -20,22 +21,26 @@ public class GenericAlg {
 	}
 
 	
-	public Solution solve() {
+	public Solution solve(boolean printData) {
 		Population pop = Population.generateRandomPopulation(popSize, supplier);
 		for(int i = 0; i < rounds; i++) {
 			pop.nextGen((int)(popSize* selectBestOfPercentage), mutateRate);
-			
-			System.out.println("Computed Generation " + i + " of " + rounds +
+
+			if(printData)
+				System.out.println("Computed Generation " + i + " of " + rounds +
 					" Generations. Best Fitness: " + pop.getBest().getFitness() +
-					" average fitness: " + pop.getAverageFitness() +
-					" median fitness " + pop.getMedianFitness());
+					" average fitness: " + String.format("%f.2", pop.getAverageFitness()) +
+					" median fitness " + pop.getMedianFitness() +
+					selectBestOfPercentage + "-quintile: " + pop.getBestOfQuintile());
+
 		}
 		
 		Solution best = pop.getBest();
 		return best;
 		
 	}
-	
+
+
 	public static class Builder{
 		
 		private GenericAlg g;

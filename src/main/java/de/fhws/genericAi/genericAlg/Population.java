@@ -11,6 +11,7 @@ class Population {
 	int size;
 	private double averageFitness;
 	private double medianFitness;
+	private double bestOfQuintile;
 	private Solution best;
 
 	private Population(List<Solution> solutions, int size) {
@@ -26,19 +27,20 @@ class Population {
 		return new Population(list, size);
 	}
 	
-	public void nextGen(int selectBestOf, double mutateRate) {
+	public void nextGen(int selectBestOf, double mutationRate) {
 		solutions.forEach(Solution::calculateFitness);
 		Collections.sort(solutions);
 		// retrieve data before repopulating; important: solutions must be sorted
 		calcAvgFit();
 		calcMedianFit();
+		calcBestOfQuintile(selectBestOf);
 		calcBest();
 		// kill all other Solutions
 		solutions = new ArrayList<>(solutions.subList(0, selectBestOf));
 		
 		int index = 0;
 		while(solutions.size() < size) {
-			if(Math.random() > mutateRate) {
+			if(Math.random() > mutationRate) {
 				solutions.add(solutions.get(index).getChild());
 			}
 			else {
@@ -60,6 +62,10 @@ class Population {
 		medianFitness = solutions.get(solutions.size() / 2).getFitness();
 	}
 
+	private void calcBestOfQuintile(int seleceBestOf) {
+		bestOfQuintile = solutions.get(seleceBestOf-1).getFitness();
+	}
+
 	private void calcBest() {
 		best = solutions.get(0);
 	}
@@ -70,6 +76,10 @@ class Population {
 
 	public double getMedianFitness() {
 		return medianFitness;
+	}
+
+	public double getBestOfQuintile() {
+		return bestOfQuintile;
 	}
 	
 	public Solution getBest() {
