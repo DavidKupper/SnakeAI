@@ -11,13 +11,13 @@ public class NeuralNetSolution implements Solution {
 
 	
 	private NeuralNet neuralNet;
-	private ToDoubleFunction<NeuralNet> fitnessFunction;
+	private FitnessFunction fitnessFunction;
 	private double dataMutationRate;
 	private double dataMutationFactor;
 	private double fitness;
 
 	
-	public NeuralNetSolution(NeuralNet neuralNet, ToDoubleFunction<NeuralNet> fitnessFunction, double dataMutationRate, double dataMutationFactor) {
+	public NeuralNetSolution(NeuralNet neuralNet, FitnessFunction fitnessFunction, double dataMutationRate, double dataMutationFactor) {
 		this.neuralNet = neuralNet;
 		this.fitnessFunction = fitnessFunction;
 		this.dataMutationRate = dataMutationRate;
