@@ -9,6 +9,12 @@ import de.fhws.genericAi.neuralNetwork.NeuralNet;
 public class NeuralNetSolution implements Solution {
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2754412409079808832L;
+	
+	
 	private NeuralNet neuralNet;
 	private FitnessFunction fitnessFunction;
 	private double dataMutationRate;

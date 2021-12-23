@@ -1,9 +1,10 @@
 package de.fhws.genericAi;
 
-import de.fhws.genericAi.neuralNetwork.NeuralNet;
-
+import java.io.Serializable;
 import java.util.function.ToDoubleFunction;
 
+import de.fhws.genericAi.neuralNetwork.NeuralNet;
+
 @FunctionalInterface
-public interface FitnessFunction extends ToDoubleFunction<NeuralNet> {
+public interface FitnessFunction extends ToDoubleFunction<NeuralNet>, Serializable {
 }

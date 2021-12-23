@@ -9,6 +9,7 @@ public class GenericAlg {
 	int rounds;
 	double mutateRate;
 	double selectBestOfPercentage;
+	Population pop;
 	Supplier<Solution> supplier; 
 
 	
@@ -22,7 +23,7 @@ public class GenericAlg {
 
 	
 	public Solution solve(boolean printData) {
-		Population pop = Population.generateRandomPopulation(popSize, supplier);
+		pop = Population.generateRandomPopulation(popSize, supplier);
 		for(int i = 0; i < rounds; i++) {
 			pop.nextGen((int)(popSize* selectBestOfPercentage), mutateRate);
 
@@ -38,6 +39,21 @@ public class GenericAlg {
 		Solution best = pop.getBest();
 		return best;
 		
+	}
+	
+	public static Supplier<Solution> getSupplierOfPopulation(Population pop) {
+		return new Supplier<Solution>(){
+			int counter = 0;
+			
+			@Override
+			public Solution get() {
+				return pop.getSolutions().get(counter++);
+			}
+		};
+	}
+	
+	public Population getPopulation() {
+		return pop;
 	}
 
 

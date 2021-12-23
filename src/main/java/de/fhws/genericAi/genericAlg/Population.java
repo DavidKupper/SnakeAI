@@ -8,14 +8,13 @@ import java.util.function.Supplier;
 
 import de.fhws.filesystemManager.FileSystemManager;
 
-class Population implements Serializable{
+public class Population implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -368273520466945201L;
-	
-	
+
 	private List<Solution> solutions;
 	int size;
 	private double averageFitness;
@@ -28,14 +27,18 @@ class Population implements Serializable{
 		this.size = size;
 	}
 	
+	public static Population loadPopulationFromFile(String fname) {
+		return (Population) FileSystemManager.getFirstObjectFromFile(fname);
+	}
+
 	public static Population generateRandomPopulation(int size, Supplier<Solution> supplier) {
 		List<Solution> list = new ArrayList<>();
-		for(int i = 0; i < size; i++) {
+		for (int i = 0; i < size; i++) {
 			list.add(supplier.get());
 		}
 		return new Population(list, size);
 	}
-	
+
 	public void nextGen(int selectBestOf, double mutationRate) {
 		solutions.forEach(Solution::calculateFitness);
 		Collections.sort(solutions);
@@ -46,32 +49,27 @@ class Population implements Serializable{
 		calcBest();
 		// kill all other Solutions
 		solutions = new ArrayList<>(solutions.subList(0, selectBestOf));
-		
+
 		int index = 0;
-		while(solutions.size() < size) {
-			if(Math.random() > mutationRate) {
+		while (solutions.size() < size) {
+			if (Math.random() > mutationRate) {
 				solutions.add(solutions.get(index).getChild());
-			}
-			else {
+			} else {
 				solutions.add(solutions.get(index).copy());
 			}
 			index = index + 1 % selectBestOf;
 		}
 	}
-	
-	/**
-	 * Safe Population to a file in the directory "files/populations" as
-	 * "savedPopulation.ser"
-	 * 
-	 * @return true the file got successfully saved and false if an Exception
-	 *         occurred.
-	 */
-	public boolean safeToFile() {
-		String dir = "files/populations";
-		return safeToFile("savedPopulation", dir, false);
+
+	public int getSize() {
+		return this.size;
 	}
 	
-	
+	public List<Solution> getSolutions() {
+		return solutions;
+	}
+
+
 	/**
 	 * save Population to a file
 	 * 
@@ -86,7 +84,7 @@ class Population implements Serializable{
 
 	private void calcAvgFit() {
 		double sum = 0;
-		for(Solution s : solutions) {
+		for (Solution s : solutions) {
 			sum += s.getFitness();
 		}
 		averageFitness = sum / solutions.size();
@@ -97,13 +95,13 @@ class Population implements Serializable{
 	}
 
 	private void calcBestOfQuintile(int seleceBestOf) {
-		bestOfQuintile = solutions.get(seleceBestOf-1).getFitness();
+		bestOfQuintile = solutions.get(seleceBestOf - 1).getFitness();
 	}
 
 	private void calcBest() {
 		best = solutions.get(0);
 	}
-	
+
 	public double getAverageFitness() {
 		return averageFitness;
 	}
@@ -115,10 +113,9 @@ class Population implements Serializable{
 	public double getBestOfQuintile() {
 		return bestOfQuintile;
 	}
-	
+
 	public Solution getBest() {
 		return best;
 	}
-	
-	
+
 }
