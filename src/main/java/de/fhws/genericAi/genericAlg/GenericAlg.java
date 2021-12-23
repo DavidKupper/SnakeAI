@@ -2,7 +2,6 @@ package de.fhws.genericAi.genericAlg;
 
 import de.fhws.filesystemManager.FileManager;
 
-import java.io.File;
 import java.util.Date;
 import java.util.function.Supplier;
 
@@ -37,14 +36,16 @@ public class GenericAlg {
 					"; median fitness " + pop.getMedianFitness() +
 					"; " + selectBestOfPercentage + " quintile: " + pop.getBestOfQuintile());
 
-			if(( gen+1) % savingInterval == 0)
+			if(savingInterval != -1 && ( gen+1) % savingInterval == 0) {
 				pop.safeToFile("saved", "files/intervalSaves", true);
-			String log = new StringBuilder()
-					.append("generation: ")
-					.append(gen).append(" dat: ")
-					.append(new Date(System.currentTimeMillis()))
-					.toString();
-			FileManager.writeObjectToFile(log, "files/log.txt",  true);
+				String log = new StringBuilder()
+						.append("generation: ")
+						.append(gen).append(" dat: ")
+						.append(new Date(System.currentTimeMillis()))
+						.append("\n")
+						.toString();
+				FileManager.writeStringToFile(log, "log.txt", "files/intervalSaves", true);
+			}
 		}
 		
 		Solution best = pop.getBest();
@@ -53,7 +54,7 @@ public class GenericAlg {
 	}
 	
 	public static Supplier<Solution> getSupplierOfPopulation(Population pop) {
-		return new Supplier<Solution>(){
+		return new Supplier<>(){
 			int counter = 0;
 			
 			@Override

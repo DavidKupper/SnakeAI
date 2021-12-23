@@ -54,7 +54,7 @@ public class GenericAi {
 		double dataMutationRate = 0.5;
 		double dataMutationFactor = 0.5;
 		Population givenPop;
-		int savingInterval;
+		int savingInterval = -1;
 
 		boolean printData = false;
 
