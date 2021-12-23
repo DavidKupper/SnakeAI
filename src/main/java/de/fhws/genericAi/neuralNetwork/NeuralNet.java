@@ -83,13 +83,7 @@ public class NeuralNet implements Serializable {
      * @return the loaded NeuralNet
      */
 	public static NeuralNet loadFromFile(String fname) {
-		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fname))) {
-			return (NeuralNet) ois.readObject();
-
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return (NeuralNet)FilesystemManager.getFirstObjectFromFile(fname);
 	}
 
 	public NeuralNet randomize(double weightRange, boolean weightsNegative, double biasRange, boolean biasNegative) {
