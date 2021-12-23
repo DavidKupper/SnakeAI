@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.function.Supplier;
 
 import de.fhws.filesystemManager.FileManager;
@@ -39,8 +42,21 @@ public class Population implements Serializable {
 		return new Population(list, size);
 	}
 
-	public void nextGen(int selectBestOf, double mutationRate) {
-		solutions.forEach(Solution::calculateFitness);
+	protected void nextGen(int selectBestOf, double mutationRate, ExecutorService executor) {
+		if(executor == null) {
+			solutions.forEach(Solution::calculateFitness);
+		}
+		else {
+			List<Future<?>> futures = new ArrayList<>(solutions.size());
+			solutions.forEach(s -> futures.add(executor.submit(s::calculateFitness)));
+			futures.forEach(e -> {
+				try {
+					e.get();
+				} catch (InterruptedException | ExecutionException interruptedException) {
+					interruptedException.printStackTrace();
+				}
+			});
+		}
 		Collections.sort(solutions);
 		// retrieve data before repopulating; important: solutions must be sorted
 		calcAvgFit();

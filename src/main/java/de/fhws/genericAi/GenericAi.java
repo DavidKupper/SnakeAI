@@ -55,8 +55,8 @@ public class GenericAi {
 		double dataMutationFactor = 0.5;
 		Population givenPop;
 		int savingInterval = -1;
-
 		boolean printData = false;
+		int threadsAmount = Runtime.getRuntime().availableProcessors();
 
 		public Builder(FitnessFunction fitnessFunction, NeuralNet.Builder nnBuilder) {
 			this.fitnessFunction = fitnessFunction;
@@ -128,6 +128,11 @@ public class GenericAi {
 		    return this;
         }
 
+        public Builder withAmountOfParallelThreads(int threads) {
+			this.threadsAmount = threads;
+			return this;
+		}
+
 		public GenericAi build() {
 			Supplier<Solution> givenSupplier;
 			if (givenPop == null) {
@@ -145,6 +150,7 @@ public class GenericAi {
 					.withGenerationsAmount(genAmount)
 					.withSelectBestOfPercent(selectBestOfPercent)
 					.withMutationRate(outerMutationRate)
+					.withAmountOfParallelThreads(threadsAmount)
 					.build(),
 					printData, savingInterval);
 		}
