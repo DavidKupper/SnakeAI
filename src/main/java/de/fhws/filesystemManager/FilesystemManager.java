@@ -1,8 +1,10 @@
 package de.fhws.filesystemManager;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -68,6 +70,22 @@ public final class FilesystemManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	/**
+	 * Get the first Object from a File
+	 * 
+	 * @param fname is the filename (including path) of the destination
+	 * 
+	 * @return the read object or null if an Exception occurred.
+	 */
+	public static Object getFirstObjectFromFile(String fname) {
+		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fname));) {
+			return ois.readObject();
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 
