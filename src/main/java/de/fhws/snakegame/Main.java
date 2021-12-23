@@ -23,17 +23,18 @@ public class Main {
         NeuralNet.Builder nnBuilder = new NeuralNet.Builder().addLayers(24, 16, 4);
         FitnessFunction fitFunc = nn -> new SnakeAi(nn).startPlaying(150);
         GenericAi ai = new GenericAi.Builder(fitFunc, nnBuilder)
-                .withPopulationSize(2000)
-                .withGenerationAmount(300)
+                .withPopulationSize(1000)
+                .withGenerationAmount(100)
                 .withSelectBestOfPercent(0.05)
                 .withOuterMutationRate(0.1)
                 .withDataMutationRate(1)
                 .withDataMutationFactor(0.25)
+                .withPrintData(true)
                 .build();
 
 
         //NeuralNet best = NeuralNet.loadFromFile("BestNeuralNetwork");
-        NeuralNet best = ai.doEvolution();
+        NeuralNet best = ai.evolve();
         best.safeAsFile("files/bestAi.ser", false);
         double score = new SnakeAi(best).startPlayingWithDisplay();
         System.out.println("fitness : " + score);

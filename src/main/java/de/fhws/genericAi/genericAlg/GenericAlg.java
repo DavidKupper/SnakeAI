@@ -27,11 +27,11 @@ public class GenericAlg {
 			pop.nextGen((int)(popSize* selectBestOfPercentage), mutateRate);
 
 			if(printData)
-				System.out.println("Computed Generation " + i + " of " + rounds +
+				System.out.println("Computed Generation " + (i+1) + " of " + rounds +
 					" Generations. Best Fitness: " + pop.getBest().getFitness() +
-					" average fitness: " + String.format("%f.2", pop.getAverageFitness()) +
-					" median fitness " + pop.getMedianFitness() +
-					selectBestOfPercentage + "-quintile: " + pop.getBestOfQuintile());
+					"; average fitness: " + String.format("%.2f", pop.getAverageFitness()) +
+					"; median fitness " + pop.getMedianFitness() +
+					"; " + selectBestOfPercentage + " quintile: " + pop.getBestOfQuintile());
 
 		}
 		

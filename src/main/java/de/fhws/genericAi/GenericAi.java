@@ -3,17 +3,18 @@ package de.fhws.genericAi;
 import de.fhws.genericAi.genericAlg.GenericAlg;
 import de.fhws.genericAi.genericAlg.Solution;
 import de.fhws.genericAi.neuralNetwork.NeuralNet;
-import de.fhws.snakegame.SnakeAi;
 
 public class GenericAi {
     private GenericAlg alg;
+    private boolean printData;
     
-    private GenericAi(GenericAlg alg) {
+    private GenericAi(GenericAlg alg, boolean printData) {
         this.alg = alg;
+        this.printData = printData;
     };
     
     public NeuralNet evolve() {
-        Solution solution = alg.solve();
+        Solution solution = alg.solve(printData);
         if(solution instanceof NeuralNetSolution)
             return (NeuralNet) ((NeuralNetSolution) solution).getNeuralNetwork();
         else
@@ -34,6 +35,8 @@ public class GenericAi {
         double outerMutationRate = 0.1;
         double dataMutationRate = 0.5;
         double dataMutationFactor = 0.5;
+
+        boolean printData = false;
         
         public Builder(FitnessFunction fitnessFunction, NeuralNet.Builder nnBuilder) {
             this.fitnessFunction = fitnessFunction;
@@ -90,6 +93,11 @@ public class GenericAi {
             return this;
         }
 
+        public Builder withPrintData(boolean printData) {
+            this.printData = printData;
+            return this;
+        }
+
         public GenericAi build() {
             return new GenericAi(new GenericAlg.Builder(() ->
                     new NeuralNetSolution(nnBuilder.build().randomize(weightRange, weightsNegative, biasRange, biasNegative),
@@ -98,7 +106,7 @@ public class GenericAi {
                     .withGenerationsAmount(genAmount)
                     .withSelectBestOfPercent(selectBestOfPercent)
                     .withMutationRate(outerMutationRate)
-                    .build());
+                    .build(), printData);
         }
     }
 }
