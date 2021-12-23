@@ -12,7 +12,7 @@ public class GenericAi {
         this.alg = alg;
     };
     
-    public NeuralNet doEvolution() {
+    public NeuralNet evolve() {
         Solution solution = alg.solve();
         if(solution instanceof NeuralNetSolution)
             return (NeuralNet) ((NeuralNetSolution) solution).getNeuralNetwork();
