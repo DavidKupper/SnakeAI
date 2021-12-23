@@ -18,23 +18,21 @@ public class SnakeAi {
 
     public double startPlaying(int max) {
         int counterToApple = 0;
-        int survCounter = 0;
         while (!logic.isGameOver() && counterToApple++ < max) {
             getDirectionFromNN();
             int score = logic.getScore();
-            logic.updateGame();
+            logic.tick();
             if(logic.getScore() > score)
                 counterToApple = 0;
-            survCounter++;
         }
-        return logic.getScore()*200 + survCounter/10d;
+        return calcFitness(logic);
     }
 
     public double startPlayingWithDisplay() {
         game = new SnakeGame(logic);
         while (!logic.isGameOver()) {
             getDirectionFromNN();
-            logic.updateGame();
+            logic.tick();
             game.paint();
             try {
                 Thread.sleep(gamespeed);
@@ -42,7 +40,11 @@ public class SnakeAi {
                 e.printStackTrace();
             }
         }
-        return logic.getScore();
+        return calcFitness(logic);
+    }
+
+    public double calcFitness(SnakeGameLogic logic) {
+        return logic.getScore()*200 + logic.getTickCounter() / 10d;
     }
 
     public void getDirectionFromNN() {

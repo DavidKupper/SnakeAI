@@ -66,7 +66,7 @@ public abstract class GameGraphics extends JFrame {
      * tick method that can be invoked from outside, or is invoked every tick
      */
     public void tick() {
-        gameLogic.updateGame();
+        gameLogic.tick();
         repaint();
     }
 

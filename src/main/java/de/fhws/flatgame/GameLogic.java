@@ -1,5 +1,5 @@
 package de.fhws.flatgame;
 
 public abstract class GameLogic {
-    public abstract void updateGame();
+    public abstract void tick();
 }

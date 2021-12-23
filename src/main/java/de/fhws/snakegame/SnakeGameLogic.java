@@ -5,7 +5,8 @@ import de.fhws.flatgame.GameLogic;
 public class SnakeGameLogic extends GameLogic {
     private Snake snake;
     private Apple apple;
-    private int score;
+    private int score = 0;
+    private int tickCounter = 0;
     boolean gameOver = false;
 
     public static final int FIELD_WIDTH = 15;
@@ -47,7 +48,8 @@ public class SnakeGameLogic extends GameLogic {
     }
 
     @Override
-    public void updateGame() {
+    public void tick() {
+        tickCounter++;
         boolean outOfBorder = snake.move();
         if(outOfBorder && !ENDLESS_FIELD)
             gameOver();
@@ -65,6 +67,10 @@ public class SnakeGameLogic extends GameLogic {
 
     public int getScore() {
         return score;
+    }
+
+    public int getTickCounter() {
+        return tickCounter;
     }
 
     public boolean isGameOver() {
