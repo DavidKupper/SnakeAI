@@ -126,7 +126,10 @@ public final class FileSystemManager {
 		return newfname;
 	}
 
-	
+	/**
+	 * creates every subdirectory of given directory recursively if not exists
+	 * @param dir
+	 */
 	private static void createSubDirIfNotExist(String dir) {
 		if(dir.indexOf("/") == -1) {
 			createDirIfNotExist(dir);
