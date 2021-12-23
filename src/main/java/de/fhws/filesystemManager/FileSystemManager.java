@@ -47,7 +47,7 @@ public final class FileSystemManager {
 	 */
 	public static <T extends Serializable> boolean writeObjectToAGeneratedFileLocation(T object, String fname, String dir, boolean counting,
 			String fileEnding, boolean override) {
-		createDirIfNotExist(dir);
+		createSubDirIfNotExist(dir);
 		String generatedFileName = generateFullFilename(fname, dir+"/", counting, fileEnding);
 		return writeObjectToFile(object, generatedFileName, override);
 	}
@@ -126,6 +126,21 @@ public final class FileSystemManager {
 		return newfname;
 	}
 
+	
+	private static void createSubDirIfNotExist(String dir) {
+		if(dir.indexOf("/") == -1) {
+			createDirIfNotExist(dir);
+			return;
+		}
+		String subDirChain = "";
+		for(String subDir : dir.split("/")) {
+			subDirChain += subDir +"/";
+			createDirIfNotExist(subDirChain);
+		}
+		
+	}
+	
+	
 	/**
 	 * Searches the directory <b> dir </b> and if not found creates it.
 	 * 
