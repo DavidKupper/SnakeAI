@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fhws.filesystemManager.FilesystemManager;
+import de.fhws.filesystemManager.FileSystemManager;
 
 public class NeuralNet implements Serializable {
 	/**
@@ -74,7 +74,7 @@ public class NeuralNet implements Serializable {
 	 */
 	public void safeAsFile(String fname, boolean override) {
 		String dir = "files/";
-		FilesystemManager.writeObjectToAGeneatedFileLocation(this, fname, dir, override, ".ser", true);
+		FileSystemManager.writeObjectToAGeneratedFileLocation(this, fname, dir, override, ".ser", true);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class NeuralNet implements Serializable {
      * @return the loaded NeuralNet
      */
 	public static NeuralNet loadFromFile(String fname) {
-		return (NeuralNet)FilesystemManager.getFirstObjectFromFile(fname);
+		return (NeuralNet)FileSystemManager.getFirstObjectFromFile(fname);
 	}
 
 	public NeuralNet randomize(double weightRange, boolean weightsNegative, double biasRange, boolean biasNegative) {

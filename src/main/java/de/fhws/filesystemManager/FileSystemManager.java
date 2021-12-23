@@ -9,13 +9,13 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public final class FilesystemManager {
+public final class FileSystemManager {
 
 	/**
 	 * Private constructor so the class can't be instantiated.
 	 *
 	 */
-	private FilesystemManager() {
+	private FileSystemManager() {
 	}
 
 	/**
@@ -44,7 +44,7 @@ public final class FilesystemManager {
 	 *         an Exception occurred.
 	 * 
 	 */
-	public static <T> boolean writeObjectToAGeneatedFileLocation(T object, String fname, String dir, boolean counting,
+	public static <T> boolean writeObjectToAGeneratedFileLocation(T object, String fname, String dir, boolean counting,
 			String fileEnding, boolean override) {
 		createDirIfNotExist(dir);
 		String generatedFileName = generateFullFilename(fname, dir, counting, fileEnding);
