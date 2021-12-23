@@ -1,11 +1,12 @@
 package de.fhws.genericAi.genericAlg;
 
-import de.fhws.filesystemManager.FileManager;
-
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Supplier;
+
+import de.fhws.filesystemManager.FileManager;
 
 public class GenericAlg {
 
@@ -56,9 +57,9 @@ public class GenericAlg {
             if (savingInterval != -1 && (gen + 1) % savingInterval == 0) {
                 pop.safeToFile("saved", "files/intervalSaves", true);
                 String log = new StringBuilder()
-                        .append("generation: ")
+                        .append("saved generation: ")
                         .append(gen).append(" dat: ")
-                        .append(new Date(System.currentTimeMillis()))
+                        .append(new SimpleDateFormat("yyyy/MM/dd - HH:mm:ss").format(Calendar.getInstance().getTime()))
                         .append("\n")
                         .toString();
                 FileManager.writeStringToFile(log, "log.txt", "files/intervalSaves", true);
