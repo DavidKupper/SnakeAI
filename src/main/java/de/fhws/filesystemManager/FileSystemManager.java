@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -44,7 +45,7 @@ public final class FileSystemManager {
 	 *         an Exception occurred.
 	 * 
 	 */
-	public static <T> boolean writeObjectToAGeneratedFileLocation(T object, String fname, String dir, boolean counting,
+	public static <T extends Serializable> boolean writeObjectToAGeneratedFileLocation(T object, String fname, String dir, boolean counting,
 			String fileEnding, boolean override) {
 		createDirIfNotExist(dir);
 		String generatedFileName = generateFullFilename(fname, dir, counting, fileEnding);
@@ -63,7 +64,7 @@ public final class FileSystemManager {
 	 * @return true if the object got successfully written to the file or false if
 	 *         an Exception occurred.
 	 */
-	public static <T> boolean writeObjectToFile(T object, String fname, boolean override) {
+	public static <T  extends Serializable> boolean writeObjectToFile(T object, String fname, boolean override) {
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fname, override))) {
 			oos.writeObject(object);
 			return true;
@@ -165,11 +166,5 @@ public final class FileSystemManager {
 		return new String[] { fname.substring(0, index), fname.substring(index, fname.length()) };
 	}
 
-	/**
-	 * loads a NeuralNet Object from a File
-	 * 
-	 * @param fname is the name and path of File
-	 * @return the loaded NeuralNet
-	 */
 
 }
