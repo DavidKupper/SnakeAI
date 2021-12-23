@@ -1,8 +1,5 @@
 package de.fhws.genericAi.neuralNetwork;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,24 +63,37 @@ public class NeuralNet implements Serializable {
 	}
 
 	/**
-	 * save NeuralNetwork to a file in the directory "files"
+	 * Safe NeuralNetwork to a file in the directory "files/neuralNetworks" as
+	 * "savedNeuralNet.ser"
 	 * 
-	 * @param fname    is the name of file (No absolute Path!)
-	 * @param override true results in the File being overwritten. false results in
-	 *                 writing the result in a new file
+	 * @return true the file got successfully saved and false if an Exception
+	 *         occurred.
 	 */
-	public void safeAsFile(String fname, boolean override) {
-		String dir = "files/";
-		FileSystemManager.writeObjectToAGeneratedFileLocation(this, fname, dir, override, ".ser", true);
+	public boolean safeAsFile() {
+		String dir = "files/neuralNetworks";
+		return safeAsFile("savedNeuralNet", dir, false);
 	}
 
 	/**
-     * loads a NeuralNet Object from a File
-     * @param fname is the name of File
-     * @return the loaded NeuralNet
-     */
+	 * save NeuralNetwork to a file
+	 * 
+	 * @param fname    is the name of file (No absolute Path!)
+	 * @param dir      is the Directory of the file
+	 * @param override true results in the File being overwritten. false results in
+	 *                 writing the result in a new file
+	 */
+	public boolean safeAsFile(String fname, String dir, boolean override) {
+		return FileSystemManager.writeObjectToAGeneratedFileLocation(this, fname, dir, override, ".ser", true);
+	}
+
+	/**
+	 * loads a NeuralNet Object from a File
+	 * 
+	 * @param fname is the name of File
+	 * @return the loaded NeuralNet
+	 */
 	public static NeuralNet loadFromFile(String fname) {
-		return (NeuralNet)FileSystemManager.getFirstObjectFromFile(fname);
+		return (NeuralNet) FileSystemManager.getFirstObjectFromFile(fname);
 	}
 
 	public NeuralNet randomize(double weightRange, boolean weightsNegative, double biasRange, boolean biasNegative) {

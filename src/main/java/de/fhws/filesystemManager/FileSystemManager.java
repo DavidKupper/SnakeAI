@@ -30,7 +30,7 @@ public final class FileSystemManager {
 	 * @param counting   determines whether the filename should be appended with a
 	 *                   counter if files with this name already exist in the
 	 *                   directory. If counting == false, no numbers get appended to
-	 *                   the filename. (e.g. filename<b>(1)<b>.txt)
+	 *                   the filename. (e.g. filename<b>(1)</b>.txt)
 	 * @param fileEnding is the ending that gets appended if no ending is given
 	 *                   in @param fname (e.g. ".txt"). If a file ending is already
 	 *                   given in @param fname this attribute gets ignored.
@@ -48,7 +48,7 @@ public final class FileSystemManager {
 	public static <T extends Serializable> boolean writeObjectToAGeneratedFileLocation(T object, String fname, String dir, boolean counting,
 			String fileEnding, boolean override) {
 		createDirIfNotExist(dir);
-		String generatedFileName = generateFullFilename(fname, dir, counting, fileEnding);
+		String generatedFileName = generateFullFilename(fname, dir+"/", counting, fileEnding);
 		return writeObjectToFile(object, generatedFileName, override);
 	}
 

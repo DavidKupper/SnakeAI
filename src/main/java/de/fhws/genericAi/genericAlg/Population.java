@@ -1,12 +1,21 @@
 package de.fhws.genericAi.genericAlg;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
-class Population {
+import de.fhws.filesystemManager.FileSystemManager;
 
+class Population implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -368273520466945201L;
+	
+	
 	private List<Solution> solutions;
 	int size;
 	private double averageFitness;
@@ -48,6 +57,31 @@ class Population {
 			}
 			index = index + 1 % selectBestOf;
 		}
+	}
+	
+	/**
+	 * Safe Population to a file in the directory "files/populations" as
+	 * "savedPopulation.ser"
+	 * 
+	 * @return true the file got successfully saved and false if an Exception
+	 *         occurred.
+	 */
+	public boolean safeToFile() {
+		String dir = "files/populations";
+		return safeToFile("savedPopulation", dir, false);
+	}
+	
+	
+	/**
+	 * save Population to a file
+	 * 
+	 * @param fname    is the name of file (No absolute Path!)
+	 * @param dir      is the Directory of the file
+	 * @param override true results in the File being overwritten. false results in
+	 *                 writing the result in a new file
+	 */
+	public boolean safeToFile(String fname, String dir, boolean override) {
+		return FileSystemManager.writeObjectToAGeneratedFileLocation(this, fname, dir, override, ".ser", true);
 	}
 
 	private void calcAvgFit() {

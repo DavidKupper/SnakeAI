@@ -1,6 +1,8 @@
 package de.fhws.genericAi.genericAlg;
 
-public interface Solution extends Comparable<Solution> {
+import java.io.Serializable;
+
+public interface Solution extends Comparable<Solution>, Serializable{
 
 	Solution copy();
 
