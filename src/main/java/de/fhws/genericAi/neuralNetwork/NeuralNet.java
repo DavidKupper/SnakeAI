@@ -68,7 +68,7 @@ public class NeuralNet implements Serializable {
 	/**
 	 * save NeuralNetwork to a file in the directory "files"
 	 * 
-	 * @param fname    is the name of file
+	 * @param fname    is the name of file (No absolute Path!)
 	 * @param override true results in the File being overwritten. false results in
 	 *                 writing the result in a new file
 	 */
