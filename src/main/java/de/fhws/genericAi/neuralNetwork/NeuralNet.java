@@ -1,13 +1,13 @@
 package de.fhws.genericAi.neuralNetwork;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.fhws.filesystemManager.FilesystemManager;
 
 public class NeuralNet implements Serializable {
 	/**
@@ -66,18 +66,15 @@ public class NeuralNet implements Serializable {
 	}
 
 	/**
-	 * save NeuralNetwork to a File
+	 * save NeuralNetwork to a file in the directory "files"
 	 * 
-	 * @param fname    is the name of File
-	 * @param override == true results in the File beeing overwritten and override
-	 *                 == false results writing the result at the end of the File
+	 * @param fname    is the name of file
+	 * @param override true results in the File being overwritten. false results in
+	 *                 writing the result in a new file
 	 */
 	public void safeAsFile(String fname, boolean override) {
-		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fname, override))) {
-			oos.writeObject(this);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		String dir = "files/";
+		FilesystemManager.writeObjectToAGeneatedFileLocation(this, fname, dir, override, ".ser", true);
 	}
 
 	/**
@@ -85,20 +82,20 @@ public class NeuralNet implements Serializable {
      * @param fname is the name of File
      * @return the loaded NeuralNet
      */
-    public static NeuralNet loadFromFile(String fname) {
-    	try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fname))) {
-    		return (NeuralNet) ois.readObject();
-    		
-    	}catch(IOException | ClassNotFoundException e) {
-    		e.printStackTrace();
-    		return null;
-    	}
-    }
+	public static NeuralNet loadFromFile(String fname) {
+		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fname))) {
+			return (NeuralNet) ois.readObject();
 
-    public NeuralNet randomize(double weightRange, boolean weightsNegative, double biasRange, boolean biasNegative) {
-    	for(Layer l : layers)
-    		l.randomize(weightRange, weightsNegative, biasRange, biasNegative);
-    	return this;
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public NeuralNet randomize(double weightRange, boolean weightsNegative, double biasRange, boolean biasNegative) {
+		for (Layer l : layers)
+			l.randomize(weightRange, weightsNegative, biasRange, biasNegative);
+		return this;
 	}
 
 	/**
@@ -125,24 +122,25 @@ public class NeuralNet implements Serializable {
 
 		/**
 		 * Constructor to create a Builder which is capable to build a NeuralNet
+		 * 
 		 * @throws IllegalArgumentException if depth is less or equal 1 or if inputNodes
 		 *                                  is less than 1
 		 */
 		public Builder() {
 			nn = new NeuralNet();
-			activationFunction = d -> (1 + Math.tanh(d /2 )) /2;
+			activationFunction = d -> (1 + Math.tanh(d / 2)) / 2;
 		}
 
-
 		/**
-		 * set activation function of the neural network. Must be called before adding any layers
-		 * @param aFunc ActivationFunction (Function that accepts Double
-		 *                           and returns Double) to describe the activation
-		 *                           function which is applied on every layer on
-		 *                           calculation
+		 * set activation function of the neural network. Must be called before adding
+		 * any layers
+		 * 
+		 * @param aFunc ActivationFunction (Function that accepts Double and returns
+		 *              Double) to describe the activation function which is applied on
+		 *              every layer on calculation
 		 */
 		public Builder withActivationFunction(ActivationFunction aFunc) {
-			if(inputLayerSet)
+			if (inputLayerSet)
 				throw new IllegalStateException("activation function must be declared before adding any layers");
 			activationFunction = aFunc;
 			return this;
@@ -203,11 +201,12 @@ public class NeuralNet implements Serializable {
 
 		/**
 		 * builds the NeuralNet
+		 * 
 		 * @return the built NeuralNet
 		 * @throws IllegalStateException
 		 */
 		public NeuralNet build() {
-			if(!inputLayerSet)
+			if (!inputLayerSet)
 				throw new IllegalStateException("can not build NeuralNet because no layer has been added");
 			return nn;
 		}
