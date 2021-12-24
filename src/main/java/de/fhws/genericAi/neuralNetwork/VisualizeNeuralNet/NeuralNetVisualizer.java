@@ -40,7 +40,6 @@ public class NeuralNetVisualizer extends GraphicsWindow {
 
 	@Override
 	public void paint(Graphics g) {
-		System.out.println("got called");
 		createGraphicComponents();
 		g.fillRect(0, 0, width, height + DECORATOR_OFFSET);
 		
