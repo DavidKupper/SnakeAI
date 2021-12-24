@@ -27,6 +27,11 @@ public class NeuralNetVisualizer extends GraphicsWindow {
 		//setVisible(true);
 	}
 	
+	/**
+	 * this Method creates a Window and draws the created NeuralNetwork
+	 *
+	 */
+	
 	public void draw() {
 		setVisible(true);
 		repaint();
