@@ -64,6 +64,7 @@ public class Population implements Serializable {
 		calcMedianFit();
 		calcBestOfQuintile(selectBestOf);
 		calcBest();
+		calcWorstFitness();
 		// kill all other Solutions
 		solutions = new ArrayList<>(solutions.subList(0, selectBestOf));
 
