@@ -65,6 +65,7 @@ public class SnakeGame extends GameGraphics implements KeyListener{
             System.exit(0);
 
         else {
+            /*
             if(e.getKeyCode() == KeyEvent.VK_W)
                 logic.getSnake().setDirection(Snake.Direction.UP);
 
@@ -75,17 +76,14 @@ public class SnakeGame extends GameGraphics implements KeyListener{
                 logic.getSnake().setDirection(Snake.Direction.DOWN);
 
             else if(e.getKeyCode() == KeyEvent.VK_D)
-                logic.getSnake().setDirection(Snake.Direction.RIGHT);
+                logic.getSnake().setDirection(Snake.Direction.RIGHT);*/
 
-            else if(e.getKeyCode() == KeyEvent.VK_ADD) {
-
+            if(e.getKeyCode() == KeyEvent.VK_U) {
                 if(SnakeAi.gamespeed > 10) SnakeAi.gamespeed -= 10;
             }
-            else if(e.getKeyCode() == KeyEvent.VK_SUBTRACT)
+            if(e.getKeyCode() == KeyEvent.VK_D)
                 SnakeAi.gamespeed += 10;
         }
-
-        tick();
 
     }
 
