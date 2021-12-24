@@ -49,6 +49,7 @@ public class SnakeGame extends GameGraphics implements KeyListener{
         for(int y = 0; y < SnakeGameLogic.FIELD_HEIGHT; y++) {
             g.drawLine(0, y*SQUARE_SIZE, SnakeGameLogic.FIELD_WIDTH*SQUARE_SIZE, y*SQUARE_SIZE);
         }
+
     }
 
 
