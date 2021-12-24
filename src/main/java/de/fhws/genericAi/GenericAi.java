@@ -55,6 +55,7 @@ public class GenericAi {
 		double dataMutationFactor = 0.5;
 		Population givenPop;
 		int savingInterval = -1;
+		String rootDirPath = null;
 		boolean printData = false;
 		int threadsAmount = Runtime.getRuntime().availableProcessors();
 
@@ -128,6 +129,11 @@ public class GenericAi {
 		    return this;
         }
 
+		public Builder withSaveMetaDataTo(String rootDirPath) {
+			this.rootDirPath = rootDirPath;
+			return this;
+		}
+
         public Builder withAmountOfParallelThreads(int threads) {
 			this.threadsAmount = threads;
 			return this;
@@ -150,6 +156,7 @@ public class GenericAi {
 					.withGenerationsAmount(genAmount)
 					.withSelectBestOfPercent(selectBestOfPercent)
 					.withMutationRate(outerMutationRate)
+					.withSaveMetaDataTo(rootDirPath)
 					.withAmountOfParallelThreads(threadsAmount)
 					.build(),
 					printData, savingInterval);

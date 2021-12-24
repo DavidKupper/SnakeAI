@@ -3,7 +3,6 @@ package de.fhws.filesystemManager;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -171,13 +170,14 @@ public final class FileManager {
 		return newfname;
 	}
 
+
 	/**
 	 * creates every subdirectory of given directory recursively if not exists
 	 * 
 	 * @param dir
 	 */
 	private static void createSubDirIfNotExist(String dir) {
-		if (dir.indexOf("/") == -1) {
+		if (!dir.contains("/")) {
 			createDirIfNotExist(dir);
 			return;
 		}
@@ -188,6 +188,25 @@ public final class FileManager {
 		}
 
 	}
+
+	/**
+	 * creates a directory which appending is automatically incremented
+	 * @param root parent directory where new dir should be made
+	 * @param dir name of the new dir (excluding autoincrement integer)
+	 * @return if creating was successful
+	 */
+	public static File createDirAutoIncrement(String root, String dir) {
+		createSubDirIfNotExist(root + "/");
+		int i = 0;
+		File actual = new File(root + "/" + dir + i);
+		while(actual.exists())
+			actual = new File(actual.getParent() + "/" + dir + (++i));
+		if(actual.mkdir())
+			return actual;
+
+		return null;
+	}
+
 
 	/**
 	 * Searches the directory <b> dir </b> and if not found creates it.
