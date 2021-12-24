@@ -45,6 +45,7 @@ public class GenericAlg {
                 System.out.println(printDataString);
 
                 String metaData = gen +
+                        ";" +
                         String.format("%.2f", pop.getAverageFitness()) +
                         ";" +
                         String.format("%.2f", pop.getBest().getFitness()) +
