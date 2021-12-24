@@ -3,6 +3,7 @@ package de.fhws.filesystemManager;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -52,6 +53,23 @@ public final class FileManager {
 		createSubDirIfNotExist(dir);
 		String generatedFileName = generateFullFilename(fname, dir + "/", counting, fileEnding);
 		return writeObjectToFile(object, generatedFileName, override);
+	}
+	
+	
+	/**
+	 * clear File or create if not exist
+	 * 
+	 * @param fname of the clearing File (including file ending)
+	 * @param dir is the directory of the clearing file.
+	 */
+	
+	public static void clearFile(String fname, String dir) {
+		createSubDirIfNotExist(dir);
+		try (FileOutputStream fos = new FileOutputStream(dir + "/" + fname);){
+		
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
