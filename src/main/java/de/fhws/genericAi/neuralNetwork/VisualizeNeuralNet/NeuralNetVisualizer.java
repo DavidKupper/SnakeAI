@@ -2,6 +2,7 @@ package de.fhws.genericAi.neuralNetwork.VisualizeNeuralNet;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import de.fhws.flatgame.GraphicsWindow;
@@ -39,6 +40,7 @@ public class NeuralNetVisualizer extends GraphicsWindow {
 
 	@Override
 	public void paint(Graphics g) {
+		System.out.println("got called");
 		createGraphicComponents();
 		g.fillRect(0, 0, width, height + DECORATOR_OFFSET);
 		
@@ -47,8 +49,6 @@ public class NeuralNetVisualizer extends GraphicsWindow {
 			layers.get(i).draw(g, layers.get(i-1));
 		}
 		layers.get(0).draw(g, null);
-
-		
 	}
 	
 	private void createGraphicComponents() {

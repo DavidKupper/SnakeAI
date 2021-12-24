@@ -18,7 +18,7 @@ class LayerGraphics {
 	static final Color RED = new Color(0xd13126);
 	static final Color GREEN = new Color(0x1fb012);
 
-	public LayerGraphics(Layer layer, int x, int width, int height) {
+	protected LayerGraphics(Layer layer, int x, int width, int height) {
 		nodes = new ArrayList<NodeGraphics>();
 		int yOffset = height / layer.getNumNodes();
 		for (int i = 0; i < layer.getNumNodes(); i++) {
@@ -27,7 +27,7 @@ class LayerGraphics {
 		weights = layer.getWeights().getData();
 	}
 	
-	public void draw(Graphics g, LayerGraphics prevLayer) {
+	protected void draw(Graphics g, LayerGraphics prevLayer) {
 		nodes.forEach(n -> n.draw(g));
 		if(prevLayer == null) return;
 		
@@ -48,13 +48,13 @@ class LayerGraphics {
 				else
 					g2.setColor(GREEN);
 			
-                g2.setStroke(new BasicStroke((float)Math.abs(weight/1000)));
+                g2.setStroke(new BasicStroke((float)Math.abs(weight/400)));
                 g2.draw(new Line2D.Float(n1x, n1y, n2x, n2y));
 			}
 		}
 	}
 	
-	public int size() {
+	protected int size() {
 		return nodes.size();
 	}
 
