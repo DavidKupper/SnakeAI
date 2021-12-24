@@ -18,7 +18,7 @@ public class SnakeAi {
 
     public double startPlaying(int max) {
         int counterToApple = 0;
-        while (!logic.isGameOver() && counterToApple++ < max) {
+        while (!logic.isGameOver() && counterToApple++ < (max + logic.getScore())) {
             getDirectionFromNN();
             int score = logic.getScore();
             logic.tick();
