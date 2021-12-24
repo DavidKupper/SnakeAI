@@ -4,6 +4,7 @@ import de.fhws.genericAi.neuralNetwork.LinearVector;
 import de.fhws.genericAi.neuralNetwork.NeuralNet;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class SnakeAi {
     NeuralNet nn;
@@ -69,7 +70,7 @@ public class SnakeAi {
     }
 
     private LinearVector getViewVector() {
-        int[] distances = new int[3*8];
+        int[] distances = new int[3*8+1];
         int counter = 0;
         // calculates all distances
         for(int x = -1; x <= 1; x++) {
@@ -82,6 +83,7 @@ public class SnakeAi {
                 }
             }
         }
+        distances[distances.length-1] = logic.getSnake().getParts().size();
         return new LinearVector(Arrays.stream(distances).mapToDouble(x -> x == 0 ? 0 : (1 / ((x-1) / 2.0 + 1))).toArray()); // 1 -> directly there, 0 -> not visible
     }
 
