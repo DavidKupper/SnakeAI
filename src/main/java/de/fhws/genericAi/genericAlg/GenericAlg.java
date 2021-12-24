@@ -30,6 +30,7 @@ public class GenericAlg {
 
 
     public Solution solve(boolean printData, int savingInterval) {
+    	boolean firstSafe = true;
         pop = Population.generateRandomPopulation(popSize, supplier);
         for (int gen = 0; gen < rounds; gen++) {
             pop.nextGen((int) (popSize * selectBestOfPercentage), mutateRate, executor);
@@ -46,7 +47,8 @@ public class GenericAlg {
                         .append(new SimpleDateFormat("yyyy/MM/dd - HH:mm:ss").format(Calendar.getInstance().getTime()))
                         .append("\n")
                         .toString();
-                FileManager.writeStringToFile(log, "log.txt", "files/intervalSaves", true);
+                FileManager.writeStringToFile(log, "log.txt", "files/intervalSaves", !firstSafe);
+                firstSafe = false;
             }
         }
 
