@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 
 import de.fhws.filesystemManager.FileManager;
+import de.fhws.genericAi.GenericAi.Builder;
 
 public class GenericAlg {
 
@@ -19,8 +20,9 @@ public class GenericAlg {
     Supplier<Solution> supplier;
     ExecutorService executor;
     File rootDir;
+    Visualizer visualizer;
 
-    private GenericAlg(int popSize, int rounds, double mutateRate, double selectBestOfPercentage, Supplier<Solution> supplier, ExecutorService executor, File rootDir) {
+    private GenericAlg(int popSize, int rounds, double mutateRate, double selectBestOfPercentage, Supplier<Solution> supplier, ExecutorService executor, File rootDir, Visualizer visualizer) {
         this.popSize = popSize;
         this.rounds = rounds;
         this.mutateRate = mutateRate;
@@ -28,20 +30,27 @@ public class GenericAlg {
         this.supplier = supplier;
         this.executor = executor;
         this.rootDir = rootDir;
+        this.visualizer = visualizer;
     }
 
 
     public Solution solve(boolean printData, int savingInterval) {
-
+    	boolean visualize = visualizer != null;
+    	
         pop = Population.generateRandomPopulation(popSize, supplier);
         for (int gen = 0; gen < rounds; gen++) {
             pop.nextGen((int) (popSize * selectBestOfPercentage), mutateRate, executor);
-
+            
             if (printData) {
                 printData(gen);
                 saveMetaDataToFile(gen);
             }
-
+            
+            if(visualize) {
+            	visualizer.setVisualizedObject(pop.getBest());
+            	visualizer.draw();
+            }
+            
             if (savingInterval != -1 && (gen + 1) % savingInterval == 0) {
                 pop.safeToFile("savedPop", rootDir.getPath(), true);
                 logSaveOfPop(gen);
@@ -123,6 +132,9 @@ public class GenericAlg {
         private String rootDirPath;
         private Supplier<Solution> solutionSupplier;
         private int threadAmount = 0;
+        private boolean visualize = false;
+		private Visualizer customVisualizer;
+        
 
         public Builder(Supplier<Solution> solutionSupplier) {
             this.solutionSupplier = solutionSupplier;
@@ -166,6 +178,17 @@ public class GenericAlg {
                 this.threadAmount = threads;
             return this;
         }
+        
+        public Builder withVisualize(boolean visualize) {
+        	this.visualize = true;
+        	return this;
+        }
+        
+        public Builder withCustomVisualizer(Visualizer visualizer) {
+        	this.customVisualizer = visualizer;
+        	return this;
+        }
+        
 
         public GenericAlg build() {
             ExecutorService executor = null;
@@ -178,7 +201,14 @@ public class GenericAlg {
             else
                 rootDir = FileManager.createDirAutoIncrement("files/logs", "log");
 
-            return new GenericAlg(popSize, genAmount, mutationRate, selectBestOfPercent, solutionSupplier, executor, rootDir);
+            Visualizer visualizer = null;
+            if(visualize) {
+            	if(customVisualizer != null)
+            		visualizer = customVisualizer;
+            }
+            
+            
+            return new GenericAlg(popSize, genAmount, mutationRate, selectBestOfPercent, solutionSupplier, executor, rootDir, visualizer);
         }
 
 

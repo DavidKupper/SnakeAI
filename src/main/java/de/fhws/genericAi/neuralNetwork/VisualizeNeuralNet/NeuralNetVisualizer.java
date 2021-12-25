@@ -2,14 +2,15 @@ package de.fhws.genericAi.neuralNetwork.VisualizeNeuralNet;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import de.fhws.flatgame.GraphicsWindow;
+import de.fhws.genericAi.NeuralNetSolution;
+import de.fhws.genericAi.genericAlg.Visualizer;
 import de.fhws.genericAi.neuralNetwork.Layer;
 import de.fhws.genericAi.neuralNetwork.NeuralNet;
 
-public class NeuralNetVisualizer extends GraphicsWindow {
+public class NeuralNetVisualizer extends GraphicsWindow implements Visualizer {
 
 	int width;
 	int height;
@@ -19,31 +20,35 @@ public class NeuralNetVisualizer extends GraphicsWindow {
 	
 	static final int DECORATOR_OFFSET = 20;
 	
-	public NeuralNetVisualizer(int width, int height, NeuralNet nn) {
+	public NeuralNetVisualizer(int width, int height) {
 		super(width, height);
 		this.width = width;
 		this.height = height - DECORATOR_OFFSET;
-		this.nn = nn;
 		//setResizable(true);
-		//setVisible(true);
 	}
 	
 	/**
 	 * this Method creates a Window and draws the created NeuralNetwork
 	 *
 	 */
-	
+	@Override
 	public void draw() {
-		setVisible(true);
+		if (isVisible() != true)
+			setVisible(true);
+		
+
 		repaint();
 	}
 
 	@Override
 	public void paint(Graphics g) {
-		createGraphicComponents();
+		//draw background
 		g.fillRect(0, 0, width, height + DECORATOR_OFFSET);
+
 		
-		
+		if(layers == null) return;
+
+	
 		for(int i = 1; i < layers.size(); i++) {
 			layers.get(i).draw(g, layers.get(i-1));
 		}
@@ -59,7 +64,14 @@ public class NeuralNetVisualizer extends GraphicsWindow {
 		}
 	}
 	
-	public void setNeuralNet(NeuralNet nn) {
-		this.nn = nn;
+	@Override
+	public <T> void setVisualizedObject(T nn) {
+		if(nn instanceof NeuralNetSolution) {
+			this.nn = ((NeuralNetSolution) nn).getNeuralNetwork();
+			createGraphicComponents();
+			return;
+		}
+		throw new IllegalArgumentException("Visualized Object wasnt a NeuralNet");
 	}
+	
 }

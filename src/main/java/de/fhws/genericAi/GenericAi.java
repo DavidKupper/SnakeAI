@@ -5,7 +5,9 @@ import java.util.function.Supplier;
 import de.fhws.genericAi.genericAlg.GenericAlg;
 import de.fhws.genericAi.genericAlg.Population;
 import de.fhws.genericAi.genericAlg.Solution;
+import de.fhws.genericAi.genericAlg.Visualizer;
 import de.fhws.genericAi.neuralNetwork.NeuralNet;
+import de.fhws.genericAi.neuralNetwork.VisualizeNeuralNet.NeuralNetVisualizer;
 
 public class GenericAi {
 	private GenericAlg alg;
@@ -57,6 +59,9 @@ public class GenericAi {
 		int savingInterval = -1;
 		String rootDirPath = null;
 		boolean printData = false;
+		boolean visualize = false;
+		int visualizerWidth = 1900;
+		int visualizerHeight = 1000;
 		int threadsAmount = Runtime.getRuntime().availableProcessors();
 
 		public Builder(FitnessFunction fitnessFunction, NeuralNet.Builder nnBuilder) {
@@ -138,6 +143,19 @@ public class GenericAi {
 			this.threadsAmount = threads;
 			return this;
 		}
+        
+        public Builder withVisualize(boolean visualize) {
+        	this.visualize = visualize;
+        	return this;
+        }
+        
+        public Builder withResizedVisualizer(int width, int height) {
+        	this.visualizerWidth = width;
+        	this.visualizerHeight = height;
+        	return this;
+        }
+        
+        
 
 		public GenericAi build() {
 			Supplier<Solution> givenSupplier;
@@ -149,7 +167,12 @@ public class GenericAi {
 				this.popSize = givenPop.getSize();
 				givenSupplier = GenericAlg.getSupplierOfPopulation(givenPop);
 			}
-
+			
+			Visualizer visualizer = null;
+			if(visualize) {
+				visualizer = new NeuralNetVisualizer(visualizerWidth, visualizerHeight);
+			}
+			
 			return new GenericAi(
 					new GenericAlg.Builder(givenSupplier)
 					.withPopulationSize(popSize)
@@ -158,6 +181,8 @@ public class GenericAi {
 					.withMutationRate(outerMutationRate)
 					.withSaveMetaDataTo(rootDirPath)
 					.withAmountOfParallelThreads(threadsAmount)
+					.withVisualize(visualize)
+					.withCustomVisualizer(visualizer)
 					.build(),
 					printData, savingInterval);
 		}
