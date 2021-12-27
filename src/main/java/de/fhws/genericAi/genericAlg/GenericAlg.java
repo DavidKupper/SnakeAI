@@ -36,11 +36,13 @@ public class GenericAlg {
     	
         pop = Population.generateRandomPopulation(popSize, supplier);
         for (int gen = 0; gen < rounds; gen++) {
+            long millis = System.currentTimeMillis();
             pop.nextGen((int) (popSize * selectBestOfPercentage), executor);
-            
+            millis = System.currentTimeMillis() - millis;
+            double seconds = millis / 1000.0;
             if (printData) {
-                printData(gen);
-                saveMetaDataToFile(gen);
+                printData(gen, seconds);
+                saveMetaDataToFile(gen, seconds);
             }
             
             if(visualize) {
@@ -65,19 +67,20 @@ public class GenericAlg {
 	/**
 	 * @param gen
 	 */
-	private void printData(int gen) {
+	private void printData(int gen, double seconds) {
 		String printDataString = (gen + 1) + " of " + rounds + " gens" +
 		        "\t avg: " + String.format("%.2f", pop.getAverageFitness()) +
 		        "\t best: " + String.format("%.2f", pop.getBest().getFitness()) +
 		        "\t " + selectBestOfPercentage + " quintile: " + String.format("%.2f", pop.getBestOfQuintile()) +
 		        "\t median: " + String.format("%.2f", pop.getMedianFitness()) +
-		        "\t worst: " + String.format("%.2f", pop.getWorstFitness());
+		        "\t worst: " + String.format("%.2f", pop.getWorstFitness()) +
+                "\t seconds computed: " + String.format("%.3f", seconds);
 
 		System.out.println(printDataString);
 
 	}
 
-	private void saveMetaDataToFile(int gen) {
+	private void saveMetaDataToFile(int gen, double seconds) {
         String metaData = gen +
                 ";" +
                 String.format("%.2f", pop.getAverageFitness()) +
@@ -89,6 +92,8 @@ public class GenericAlg {
                 String.format("%.2f", pop.getMedianFitness()) +
                 ";" +
                 String.format("%.2f", pop.getWorstFitness()) +
+                ";" +
+                String.format("%.3f", seconds) +
                 ";" +
                 "\n";
         FileManager.writeStringToFile(metaData, "statistics.csv", rootDir.getPath(), true);
