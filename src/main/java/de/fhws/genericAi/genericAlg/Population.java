@@ -43,7 +43,7 @@ public class Population implements Serializable {
 		return new Population(list, size);
 	}
 
-	protected void nextGen(int selectBestOf, double mutationRate, ExecutorService executor) {
+	protected void nextGen(int selectBestOf, ExecutorService executor) {
 		if(executor == null) {
 			solutions.forEach(Solution::calculateFitness);
 		}
@@ -70,11 +70,7 @@ public class Population implements Serializable {
 
 		int index = 0;
 		while (solutions.size() < size) {
-			if (Math.random() > mutationRate) {
-				solutions.add(solutions.get(index).getChild());
-			} else {
-				solutions.add(solutions.get(index).copy());
-			}
+			solutions.add(solutions.get(index).getChild(this));
 			index = index + 1 % selectBestOf;
 		}
 	}

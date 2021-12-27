@@ -10,7 +10,7 @@ public interface Solution extends Comparable<Solution>, Serializable{
 	
 	void calculateFitness();
 
-	Solution getChild();
+	Solution getChild(Population population);
 
 	default int compareTo(Solution o) {
 		if (getFitness() - o.getFitness() == 0)

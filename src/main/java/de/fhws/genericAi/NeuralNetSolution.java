@@ -2,6 +2,7 @@ package de.fhws.genericAi;
 
 import java.util.List;
 
+import de.fhws.genericAi.genericAlg.Population;
 import de.fhws.genericAi.genericAlg.Solution;
 import de.fhws.genericAi.neuralNetwork.Layer;
 import de.fhws.genericAi.neuralNetwork.NeuralNet;
@@ -17,16 +18,20 @@ public class NeuralNetSolution implements Solution {
 	
 	private NeuralNet neuralNet;
 	private FitnessFunction fitnessFunction;
+	private double mutationRate;
 	private double dataMutationRate;
 	private double dataMutationFactor;
+	private boolean crossover;
 	private double fitness;
 
 	
-	public NeuralNetSolution(NeuralNet neuralNet, FitnessFunction fitnessFunction, double dataMutationRate, double dataMutationFactor) {
+	public NeuralNetSolution(NeuralNet neuralNet, FitnessFunction fitnessFunction, double mutationRate, double dataMutationRate, double dataMutationFactor, boolean crossover) {
 		this.neuralNet = neuralNet;
 		this.fitnessFunction = fitnessFunction;
+		this.mutationRate = mutationRate;
 		this.dataMutationRate = dataMutationRate;
 		this.dataMutationFactor = dataMutationFactor;
+		this.crossover = crossover;
 	}
 
 	
@@ -37,12 +42,25 @@ public class NeuralNetSolution implements Solution {
 	
 	@Override
 	public NeuralNetSolution copy() {
-		return new NeuralNetSolution(neuralNet.copy(), fitnessFunction, dataMutationRate, dataMutationFactor);
+		return new NeuralNetSolution(neuralNet.copy(), fitnessFunction, mutationRate, dataMutationRate, dataMutationFactor, crossover);
 	};
 
 	@Override
-	public NeuralNetSolution getChild() {
-		return getMutatedChild();
+	public NeuralNetSolution getChild(Population population) {
+		NeuralNetSolution child;
+		if(crossover) {
+			List<Solution> solutions = population.getSolutions();
+			final int MAX = solutions.size();
+			NeuralNetSolution parent = (NeuralNetSolution) solutions.get( (int) (Math.random() * MAX) );
+			child = getCrossoverChild(this, parent);
+		}
+		else
+			child = this.copy();
+
+		if (Math.random() < mutationRate) {
+			child.mutate();
+		}
+		return child;
 	}
 
 	public NeuralNetSolution getMutatedChild() {
