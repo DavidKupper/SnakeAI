@@ -2,6 +2,7 @@ package de.fhws.genericAi;
 
 import java.util.List;
 
+import de.fhws.genericAi.genericAlg.Population;
 import de.fhws.genericAi.genericAlg.Solution;
 import de.fhws.genericAi.neuralNetwork.Layer;
 import de.fhws.genericAi.neuralNetwork.NeuralNet;
@@ -41,8 +42,13 @@ public class NeuralNetSolution implements Solution {
 	};
 
 	@Override
-	public NeuralNetSolution getChild() {
-		return getMutatedChild();
+	public NeuralNetSolution getChild(Population population) {
+		List<Solution> solutions = population.getSolutions();
+		final int MAX = solutions.size();
+		NeuralNetSolution parent1 = (NeuralNetSolution) solutions.get( (int) (Math.random() * MAX) );
+		NeuralNetSolution parent2 = (NeuralNetSolution) solutions.get( (int) (Math.random() * MAX) );
+		return getCrossoverChild(parent1, parent2);
+		//return getMutatedChild();
 	}
 
 	public NeuralNetSolution getMutatedChild() {

@@ -71,7 +71,7 @@ public class Population implements Serializable {
 		int index = 0;
 		while (solutions.size() < size) {
 			if (Math.random() > mutationRate) {
-				solutions.add(solutions.get(index).getChild());
+				solutions.add(solutions.get(index).getChild(this));
 			} else {
 				solutions.add(solutions.get(index).copy());
 			}
