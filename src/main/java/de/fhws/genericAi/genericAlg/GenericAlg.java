@@ -91,7 +91,7 @@ public class GenericAlg {
                 String.format("%.2f", pop.getWorstFitness()) +
                 ";" +
                 "\n";
-        FileManager.writeStringToFile(metaData, "log.txt", rootDir.getPath(), true);
+        FileManager.writeStringToFile(metaData, "statistics.csv", rootDir.getPath(), true);
     }
 
     public void logSaveOfPop(int gen) {
@@ -101,7 +101,7 @@ public class GenericAlg {
                 .append(new SimpleDateFormat("yyyy/MM/dd - HH:mm:ss").format(Calendar.getInstance().getTime()))
                 .append("\n")
                 .toString();
-        FileManager.writeStringToFile(log, "log.txt", rootDir.getPath(), false);
+        FileManager.writeStringToFile(log, "log.txt", rootDir.getPath(), true);
     }
 
     public static Supplier<Solution> getSupplierOfPopulation(Population pop) {
