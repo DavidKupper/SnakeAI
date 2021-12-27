@@ -180,7 +180,7 @@ public class GenericAlg {
         }
         
         public Builder withVisualize(boolean visualize) {
-        	this.visualize = true;
+        	this.visualize = visualize;
         	return this;
         }
         
