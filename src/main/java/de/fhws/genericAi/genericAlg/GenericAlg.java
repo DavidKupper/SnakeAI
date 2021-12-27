@@ -8,13 +8,11 @@ import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 
 import de.fhws.filesystemManager.FileManager;
-import de.fhws.genericAi.GenericAi.Builder;
 
 public class GenericAlg {
 
     int popSize;
     int rounds;
-    double mutateRate;
     double selectBestOfPercentage;
     Population pop;
     Supplier<Solution> supplier;
@@ -22,10 +20,9 @@ public class GenericAlg {
     File rootDir;
     Visualizer visualizer;
 
-    private GenericAlg(int popSize, int rounds, double mutateRate, double selectBestOfPercentage, Supplier<Solution> supplier, ExecutorService executor, File rootDir, Visualizer visualizer) {
+    private GenericAlg(int popSize, int rounds, double selectBestOfPercentage, Supplier<Solution> supplier, ExecutorService executor, File rootDir, Visualizer visualizer) {
         this.popSize = popSize;
         this.rounds = rounds;
-        this.mutateRate = mutateRate;
         this.selectBestOfPercentage = selectBestOfPercentage;
         this.supplier = supplier;
         this.executor = executor;
@@ -39,7 +36,7 @@ public class GenericAlg {
     	
         pop = Population.generateRandomPopulation(popSize, supplier);
         for (int gen = 0; gen < rounds; gen++) {
-            pop.nextGen((int) (popSize * selectBestOfPercentage), mutateRate, executor);
+            pop.nextGen((int) (popSize * selectBestOfPercentage), executor);
             
             if (printData) {
                 printData(gen);
@@ -127,7 +124,6 @@ public class GenericAlg {
 
         private int popSize = 100;
         private int genAmount = 100;
-        private double mutationRate = 0.1;
         private double selectBestOfPercent = 0.25;
         private String rootDirPath;
         private Supplier<Solution> solutionSupplier;
@@ -150,13 +146,6 @@ public class GenericAlg {
             return this;
         }
 
-        public Builder withMutationRate(double mutationRate) {
-            if (mutationRate < 0 || mutationRate > 1)
-                throw new IllegalArgumentException("Mutate Rate must be between 0 and 1");
-
-            this.mutationRate = mutationRate;
-            return this;
-        }
 
         public Builder withSelectBestOfPercent(double selectBestOfPercent) {
             if (selectBestOfPercent < 0 || selectBestOfPercent > 1)
@@ -208,7 +197,7 @@ public class GenericAlg {
             }
             
             
-            return new GenericAlg(popSize, genAmount, mutationRate, selectBestOfPercent, solutionSupplier, executor, rootDir, visualizer);
+            return new GenericAlg(popSize, genAmount, selectBestOfPercent, solutionSupplier, executor, rootDir, visualizer);
         }
 
 

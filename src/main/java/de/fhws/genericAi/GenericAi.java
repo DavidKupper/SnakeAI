@@ -55,6 +55,7 @@ public class GenericAi {
 		double outerMutationRate = 0.1;
 		double dataMutationRate = 0.5;
 		double dataMutationFactor = 0.5;
+		boolean crossover = false;
 		Population givenPop;
 		int savingInterval = -1;
 		String rootDirPath = null;
@@ -119,6 +120,11 @@ public class GenericAi {
 			return this;
 		}
 
+		public Builder withCrossover(boolean crossover) {
+			this.crossover = crossover;
+			return this;
+		}
+
 		public Builder withPrintData(boolean printData) {
 			this.printData = printData;
 			return this;
@@ -162,7 +168,7 @@ public class GenericAi {
 			if (givenPop == null) {
 				givenSupplier = () -> new NeuralNetSolution(
 						nnBuilder.build().randomize(weightRange, weightsNegative, biasRange, biasNegative),
-						fitnessFunction, dataMutationRate, dataMutationFactor);
+						fitnessFunction, outerMutationRate, dataMutationRate, dataMutationFactor, crossover);
 			} else {
 				this.popSize = givenPop.getSize();
 				givenSupplier = GenericAlg.getSupplierOfPopulation(givenPop);
@@ -178,7 +184,6 @@ public class GenericAi {
 					.withPopulationSize(popSize)
 					.withGenerationsAmount(genAmount)
 					.withSelectBestOfPercent(selectBestOfPercent)
-					.withMutationRate(outerMutationRate)
 					.withSaveMetaDataTo(rootDirPath)
 					.withAmountOfParallelThreads(threadsAmount)
 					.withVisualize(visualize)
