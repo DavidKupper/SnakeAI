@@ -71,7 +71,8 @@ public class Population implements Serializable {
 		int index = 0;
 		while (solutions.size() < size) {
 			solutions.add(solutions.get(index).getChild(this));
-			index = index + 1 % selectBestOf;
+			index = (index + 1) % selectBestOf;
+			System.out.println(index);
 		}
 	}
 
