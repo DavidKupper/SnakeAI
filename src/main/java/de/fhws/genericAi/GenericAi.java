@@ -57,6 +57,7 @@ public class GenericAi {
 		double dataMutationFactor = 0.5;
 		boolean crossover = false;
 		Population givenPop;
+		boolean priorRun = false;
 		int savingInterval = -1;
 		String rootDirPath = null;
 		boolean printData = false;
@@ -132,6 +133,12 @@ public class GenericAi {
 
 		public Builder withBasePopulation(Population givenPop) {
 			this.givenPop = givenPop;
+			return this;
+		}
+
+		public Builder withPriorRun(String logDir) {
+			withBasePopulation(Population.loadPopulationFromFile(logDir + "/savedPop.ser"));
+			withSaveMetaDataTo(logDir);
 			return this;
 		}
 
